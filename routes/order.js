@@ -129,4 +129,22 @@ router.addOrder = (req, res) => {
     })
 }
 
+/**
+ * DELETE
+ * deleteOrder - delete an order
+ * @param req
+ * @param res
+ */
+router.deleteOrder = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    Order.findByIdAndRemove(req.params.id, (err, order) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete Order"}, null, 5))
+        }
+    })
+}
+
 module.exports = router

@@ -55,6 +55,7 @@ app.delete('/user/:id/favorite', userRouter.deleteFavorite)
 app.get('/order', orderRouter.findAll)
 app.get('/order/:id', orderRouter.findOne)
 app.post('/order', orderRouter.addOrder)
+app.delete('/order/:id', orderRouter.deleteOrder)
 app.get('/order/user/:id', orderRouter.findAllByUser)
 app.get('/order/seller/:id', orderRouter.findAllBySeller)
 
