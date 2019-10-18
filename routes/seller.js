@@ -201,4 +201,37 @@ router.addRating = (req, res) => {
     })
 }
 
+/**
+ * DELETE
+ * deleteRating - delete one rating
+ * @param req
+ * @param res
+ */
+router.deleteRating = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    Seller.findById(req.params.id, (err, seller) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            let ratings = seller.ratings
+            let rating = {}
+            rating.username = req.body.username
+            rating.deliveryTime = req.body.deliveryTime
+            rating.score = req.body.score
+            rating.rateType = req.body.rateType
+            rating.text = req.body.text
+            rating.avatar = req.body.avatar
+            rating.recommend = req.body.recommend
+            Seller.update({_id: seller._id}, {$pull: {ratings: rating}}, (err) => {
+                if (err) {
+                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                } else {
+                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete Rating"}, null, 5))
+                }
+            })
+        }
+    })
+}
+
 module.exports = router
