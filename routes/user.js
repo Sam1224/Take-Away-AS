@@ -257,4 +257,29 @@ router.addFavorite = (req, res) => {
     })
 }
 
+/**
+ * DELETE
+ * deleteFavorite - delete a shop from the favorite list
+ * @param req
+ * @param res
+ */
+router.deleteFavorite = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    User.findById(req.params.id, (err, user) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            let favorite = req.body.favorite
+            User.update({_id: user._id}, {$pull: {favorite: favorite}}, (err) => {
+                if (err) {
+                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                } else {
+                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete Favorite"}, null, 5))
+                }
+            })
+        }
+    })
+}
+
 module.exports = router

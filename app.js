@@ -48,6 +48,7 @@ app.delete('/user/:id/address', userRouter.deleteAddress)
 app.post('/user/:id/pay', userRouter.addPay)
 app.delete('/user/:id/pay', userRouter.deletePay)
 app.post('/user/:id/favorite', userRouter.addFavorite)
+app.delete('/user/:id/favorite', userRouter.deleteFavorite)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
