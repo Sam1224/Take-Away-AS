@@ -42,6 +42,9 @@ app.get('/user', userRouter.findAll)
 app.get('/user/:id', userRouter.findOne)
 app.post('/user', userRouter.addUser)
 app.put('/user/:id', userRouter.updateUser)
+app.delete('/user/:id', userRouter.deleteUser)
+app.post('/user/:id/address', userRouter.addAddress)
+app.delete('/user/:id/address', userRouter.deleteAddress)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

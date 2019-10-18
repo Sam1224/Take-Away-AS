@@ -114,4 +114,72 @@ router.updateUser = (req, res) => {
     })
 }
 
+/**
+ * DELETE
+ * deleteUser - delete a specific user
+ * @param req
+ * @param res
+ */
+router.deleteUser = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    User.findByIdAndRemove(req.params.id, (err, user) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete User"}, null, 5))
+        }
+    })
+}
+
+/**
+ * POST
+ * addAddress - add a new address
+ * @param req
+ * @param res
+ */
+router.addAddress = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    User.findById(req.params.id, (err, user) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            let address = req.body.address
+            User.update({_id: user._id}, {$addToSet: {address: address}}, (err) => {
+                if (err) {
+                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                } else {
+                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Address"}, null, 5))
+                }
+            })
+        }
+    })
+}
+
+/**
+ * DELETE
+ * deleteAddress - delete an address
+ * @param req
+ * @param res
+ */
+router.deleteAddress = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    User.findById(req.params.id, (err, user) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            let address = req.body.address
+            User.update({_id: user._id}, {$pull: {address: address}}, (err) => {
+                if (err) {
+                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                } else {
+                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete Address"}, null, 5))
+                }
+            })
+        }
+    })
+}
+
 module.exports = router
