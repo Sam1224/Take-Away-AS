@@ -6,6 +6,7 @@
 var express = require('express')
 var mongoose = require('mongoose')
 var Order = require('../models/order')
+var Seller = require('../models/seller')
 var router = express.Router()
 
 // Constant
@@ -143,6 +144,49 @@ router.deleteOrder = (req, res) => {
             res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
         } else {
             res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete Order"}, null, 5))
+        }
+    })
+}
+
+/**
+ *
+ * @param req
+ * @param res
+ */
+router.commentOrder = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    Order.findById(req.params.id, (err, order) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            // add a rating to seller
+            let rating = {}
+            let seller = req.body.seller
+            rating.username = req.body.username
+            rating.rateTime = new Date().getTime()
+            rating.deliveryTime = req.body.deliveryTime
+            rating.score = req.body.score
+            rating.rateType = req.body.rateType
+            rating.text = req.body.text
+            rating.avatar = req.body.avatar
+            rating.recommend = req.body.recommend
+            Seller.update({_id: seller}, {$addToSet: {ratings: rating}}, (err) => {
+                if (err) {
+                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                } else {
+                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Rating"}, null, 5))
+                }
+            })
+
+            order.status = 1
+            order.save((err) => {
+                if (err) {
+                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                } else {
+                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Update Order"}, null, 5))
+                }
+            })
         }
     })
 }

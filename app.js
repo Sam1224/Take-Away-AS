@@ -56,6 +56,7 @@ app.get('/order', orderRouter.findAll)
 app.get('/order/:id', orderRouter.findOne)
 app.post('/order', orderRouter.addOrder)
 app.delete('/order/:id', orderRouter.deleteOrder)
+app.put('/order/:id', orderRouter.commentOrder)
 app.get('/order/user/:id', orderRouter.findAllByUser)
 app.get('/order/seller/:id', orderRouter.findAllBySeller)
 
