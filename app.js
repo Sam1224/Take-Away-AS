@@ -31,6 +31,7 @@ app.use('/users', usersRouter);
 // Seller
 app.get('/seller', sellerRouter.findAll)
 app.get('/seller/:id', sellerRouter.findOne)
+app.post('/seller', sellerRouter.addSeller)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

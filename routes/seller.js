@@ -60,4 +60,36 @@ router.findOne = (req, res) => {
     })
 }
 
+/**
+ * POST
+ * addSeller - create a new seller and save it to the database
+ * @param req
+ * @param res
+ */
+router.addSeller = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    var seller = new Seller()
+
+    seller.name = req.body.name
+    seller.description = req.body.description
+    seller.deliveryTime = req.body.deliveryTime
+    seller.bulletin = req.body.bulletin
+    seller.supports = req.body.supports
+    seller.avatar = req.body.avatar
+    seller.pics = req.body.pics
+    seller.infos = req.body.infos
+    // At first, seller should not have goods and ratings
+    seller.goods = []
+    seller.ratings = []
+
+    seller.save((err) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            res.send(JSON.stringify({code: ERR_OK, data: seller}, null, 5))
+        }
+    })
+}
+
 module.exports = router
