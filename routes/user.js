@@ -232,4 +232,29 @@ router.deletePay = (req, res) => {
     })
 }
 
+/**
+ * POST
+ * addFavorite - Add a shop to be a favorite
+ * @param req
+ * @param res
+ */
+router.addFavorite = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    User.findById(req.params.id, (err, user) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            let favorite = req.body.favorite
+            User.update({_id: user._id}, {$addToSet: {favorite: favorite}}, (err) => {
+                if (err) {
+                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                } else {
+                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Favorite"}, null, 5))
+                }
+            })
+        }
+    })
+}
+
 module.exports = router
