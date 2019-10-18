@@ -19,11 +19,13 @@ const seller = new Schema({
         ratingCount: {type: Number, default: 0},
         sellCount: {type: Number, default: 0},
         bulletin: String,
-        supports: [{description: String}],
+        supports: [{
+            types: Number,
+            description: String
+        }],
         avatar: String,
         pics: [{type: String}],
         infos: [{type: String}],
-        goods: [{name: String}],
         ratings: [{
             username: String,
             rateTime: Number,
@@ -33,7 +35,28 @@ const seller = new Schema({
             text: String,
             avatar: String,
             recommend: [String]
+        }],
+        goods: [{
+            name: String,
+            types: String,
+            foods: [{
+                name: String,
+                price: String,
+                oldPrice: {type: Number, default: ""},
+                description: {type: String, default: ""},
+                sellCount: {type: Number, default: 0},
+                rating: {type: Number, default: 0},
+                info: {type: String, default: ""},
+                ratings: [{
+                    username: String,
+                    rateTime: Number,
+                    rateType: Number,
+                    text: {type: String, default: ""},
+                    avatar: {type: String, default: ""}
+                }]
+            }]
         }]
+
     },
     {collection: 'seller'})
 

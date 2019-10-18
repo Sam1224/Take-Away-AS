@@ -142,4 +142,29 @@ router.deleteSeller = (req, res) => {
     })
 }
 
+/**
+ * POST
+ * updateGoods - update the information of goods
+ * @param req
+ * @param res
+ */
+router.updateGoods = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    Seller.findById(req.params.id, (err, seller) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            seller.goods = req.body.goods ? req.body.goods : seller.goods
+            seller.save((err) => {
+                if (err) {
+                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                } else {
+                    res.send(JSON.stringify({code: ERR_OK, data: seller}, null, 5))
+                }
+            })
+        }
+    })
+}
+
 module.exports = router
