@@ -78,4 +78,22 @@ router.findAllBySeller = (req, res) => {
     })
 }
 
+/**
+ * GET
+ * findOne - get one specific order
+ * @param req
+ * @param res
+ */
+router.findOne = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    Order.find({"_id": req.params.id}, (err, order) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            res.send(JSON.stringify({code: ERR_OK, data: order}, null, 5))
+        }
+    })
+}
+
 module.exports = router
