@@ -42,4 +42,22 @@ router.findAll = (req, res) => {
     })
 }
 
+/**
+ * GET
+ * findAllByUser - get one user's all orders
+ * @param req
+ * @param res
+ */
+router.findAllByUser = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    Order.find({"user": req.params.id}, (err, orders) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            res.send(JSON.stringify({code: ERR_OK, data: orders}, null, 5))
+        }
+    })
+}
+
 module.exports = router
