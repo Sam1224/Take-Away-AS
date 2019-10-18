@@ -29,7 +29,8 @@ app.use('/users', usersRouter);
  * Self-defined routers
  */
 // Seller
-app.get('/seller', sellerRouter.findAll);
+app.get('/seller', sellerRouter.findAll)
+app.get('/seller/:id', sellerRouter.findOne)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

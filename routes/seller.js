@@ -42,4 +42,22 @@ router.findAll = (req, res) => {
     })
 }
 
+/**
+ * GET
+ * findOne - get one document through '_id'
+ * @param req - should contain parameter: id
+ * @param res
+ */
+router.findOne = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    Seller.find({"_id": req.params.id}, (err, seller) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            res.send(JSON.stringify({code: ERR_OK, data: seller}, null, 5))
+        }
+    })
+}
+
 module.exports = router
