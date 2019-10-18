@@ -207,4 +207,29 @@ router.addPay = (req, res) => {
     })
 }
 
+/**
+ * DELETE
+ * deletePay - delete a payment type
+ * @param req
+ * @param res
+ */
+router.deletePay = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    User.findById(req.params.id, (err, user) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            let pay = req.body.pay
+            User.update({_id: user._id}, {$pull: {pay: pay}}, (err) => {
+                if (err) {
+                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                } else {
+                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete Payment"}, null, 5))
+                }
+            })
+        }
+    })
+}
+
 module.exports = router
