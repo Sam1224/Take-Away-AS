@@ -24,6 +24,12 @@ db.once('open', function () {
     console.log('connected to database')
 })
 
+/**
+ * GET
+ * findAll - get all documents of users
+ * @param req
+ * @param res
+ */
 router.findAll = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
@@ -32,6 +38,24 @@ router.findAll = (req, res) => {
             res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
         } else {
             res.send(JSON.stringify({code: ERR_OK, data: users}, null, 5))
+        }
+    })
+}
+
+/**
+ * GET
+ * findOne - get one document through '_id'
+ * @param req - should contain parameter: id
+ * @param res
+ */
+router.findOne = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    User.find({"_id": req.params.id}, (err, user) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            res.send(JSON.stringify({code: ERR_OK, data: user}, null, 5))
         }
     })
 }
