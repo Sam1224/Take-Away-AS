@@ -87,7 +87,7 @@ router.addSeller = (req, res) => {
         if (err) {
             res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
         } else {
-            res.send(JSON.stringify({code: ERR_OK, data: seller}, null, 5))
+            res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Seller"}, null, 5))
         }
     })
 }
@@ -117,7 +117,7 @@ router.updateSeller = (req, res) => {
                 if (err) {
                     res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
                 } else {
-                    res.send(JSON.stringify({code: ERR_OK, data: seller}, null, 5))
+                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Update Seller"}, null, 5))
                 }
             })
         }
@@ -137,13 +137,13 @@ router.deleteSeller = (req, res) => {
         if (err) {
             res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
         } else {
-            res.send(JSON.stringify({code: ERR_OK, data: seller}, null, 5))
+            res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete Seller"}, null, 5))
         }
     })
 }
 
 /**
- * POST
+ * PUT
  * updateGoods - update the information of goods
  * @param req
  * @param res
@@ -160,7 +160,41 @@ router.updateGoods = (req, res) => {
                 if (err) {
                     res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
                 } else {
-                    res.send(JSON.stringify({code: ERR_OK, data: seller}, null, 5))
+                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Update Goods"}, null, 5))
+                }
+            })
+        }
+    })
+}
+
+/**
+ * POST
+ * addRating - add a new rating
+ * @param req
+ * @param res
+ */
+router.addRating = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    Seller.findById(req.params.id, (err, seller) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            let ratings = seller.ratings
+            let rating = {}
+            rating.username = req.body.username
+            rating.rateTime = new Date().getTime()
+            rating.deliveryTime = req.body.deliveryTime
+            rating.score = req.body.score
+            rating.rateType = req.body.rateType
+            rating.text = req.body.text
+            rating.avatar = req.body.avatar
+            rating.recommend = req.body.recommend
+            Seller.update({_id: seller._id}, {$addToSet: {ratings: rating}}, (err) => {
+                if (err) {
+                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                } else {
+                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Rating"}, null, 5))
                 }
             })
         }

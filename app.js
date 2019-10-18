@@ -35,6 +35,7 @@ app.post('/seller', sellerRouter.addSeller)
 app.put('/seller/:id', sellerRouter.updateSeller)
 app.delete('/seller/:id', sellerRouter.deleteSeller)
 app.put('/seller/:id/goods', sellerRouter.updateGoods)
+app.post('/seller/:id/ratings', sellerRouter.addRating)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
