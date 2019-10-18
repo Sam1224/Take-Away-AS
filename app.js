@@ -33,6 +33,7 @@ app.get('/seller', sellerRouter.findAll)
 app.get('/seller/:id', sellerRouter.findOne)
 app.post('/seller', sellerRouter.addSeller)
 app.put('/seller/:id', sellerRouter.updateSeller)
+app.delete('/seller/:id', sellerRouter.deleteSeller)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -124,4 +124,22 @@ router.updateSeller = (req, res) => {
     })
 }
 
+/**
+ * DELETE
+ * deleteSeller - delete one document from database through ':id'
+ * @param req - should contain parameter: id
+ * @param res
+ */
+router.deleteSeller = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    Seller.findByIdAndRemove(req.params.id, (err, seller) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            res.send(JSON.stringify({code: ERR_OK, data: seller}, null, 5))
+        }
+    })
+}
+
 module.exports = router
