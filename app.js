@@ -41,6 +41,7 @@ app.delete('/seller/:id/ratings', sellerRouter.deleteRating)
 app.get('/user', userRouter.findAll)
 app.get('/user/:id', userRouter.findOne)
 app.post('/user', userRouter.addUser)
+app.put('/user/:id', userRouter.updateUser)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

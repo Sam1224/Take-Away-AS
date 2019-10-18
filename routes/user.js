@@ -87,4 +87,31 @@ router.addUser = (req, res) => {
     })
 }
 
+/**
+ * PUT
+ * updateUser - update the information of a user
+ * @param req
+ * @param res
+ */
+router.updateUser = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    User.findById(req.params.id, (err, user) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            user.username = req.body.username ? req.body.username : user.username
+            user.password = req.body.password ? sha1(req.body.password) : user.password
+            user.phone = req.body.phone ? req.body.phone : user.phone
+            user.save((err) => {
+                if (err) {
+                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                } else {
+                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Update User"}, null, 5))
+                }
+            })
+        }
+    })
+}
+
 module.exports = router
