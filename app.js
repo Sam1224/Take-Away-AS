@@ -5,9 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var stylus = require('stylus');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var indexRouter = require('./routes/index')
 var sellerRouter = require('./routes/seller')
+var userRouter = require('./routes/user')
 
 var app = express();
 
@@ -23,7 +23,6 @@ app.use(stylus.middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 /**
  * Self-defined routers
@@ -37,6 +36,9 @@ app.delete('/seller/:id', sellerRouter.deleteSeller)
 app.put('/seller/:id/goods', sellerRouter.updateGoods)
 app.post('/seller/:id/ratings', sellerRouter.addRating)
 app.delete('/seller/:id/ratings', sellerRouter.deleteRating)
+
+// User
+app.get('/user', userRouter.findAll)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

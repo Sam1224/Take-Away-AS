@@ -33,9 +33,10 @@ db.once('open', function () {
 router.findAll = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
-    Seller.find(function (err, sellers) {
-        if (err)
+    Seller.find((err, sellers) => {
+        if (err) {
             res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        }
         else {
             res.send(JSON.stringify({code: ERR_OK, data: sellers}, null, 5))
         }
