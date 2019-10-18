@@ -60,5 +60,5 @@ const seller = new Schema({
     },
     {collection: 'seller'})
 
-module.exports = mongoose.model('Seller', seller);
+module.exports = mongoose.model('Seller', seller)
 
