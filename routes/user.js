@@ -7,6 +7,7 @@ var express = require('express')
 var mongoose = require('mongoose')
 var User = require('../models/user')
 var router = express.Router()
+var sha1 = require('sha1')
 
 // Constant
 const ERR_OK = 0
@@ -56,6 +57,32 @@ router.findOne = (req, res) => {
             res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
         } else {
             res.send(JSON.stringify({code: ERR_OK, data: user}, null, 5))
+        }
+    })
+}
+
+/**
+ * POST
+ * addUser - create a new user
+ * @param req
+ * @param res
+ */
+router.addUser = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    var user = new User()
+    user.username = req.body.username
+    user.password = sha1(req.body.password)
+    user.phone = req.body.phone
+    user.address = []
+    user.pay = []
+    user.favorite = []
+
+    user.save((err) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add User"}, null, 5))
         }
     })
 }
