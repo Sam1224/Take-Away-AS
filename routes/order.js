@@ -96,4 +96,37 @@ router.findOne = (req, res) => {
     })
 }
 
+/**
+ * POST
+ * addOrder - add one specific order
+ * @param req
+ * @param res
+ */
+router.addOrder = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    var order = new Order()
+    order.user = req.body.user
+    order.seller = req.body.seller
+    order.phone = req.body.phone
+    order.address = req.body.address
+    order.note = req.body.note
+    // 0 - to be commented, 1 - commented
+    order.status = 0
+    order.foods = req.body.foods
+    let totalPrice = 0
+    order.foods.forEach((food) => {
+        totalPrice += food.price * food.quantity
+    })
+    order.totalPrice = totalPrice
+
+    order.save((err) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Order"}, null, 5))
+        }
+    })
+}
+
 module.exports = router
