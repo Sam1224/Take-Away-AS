@@ -54,6 +54,7 @@ app.delete('/user/:id/favorite', userRouter.deleteFavorite)
 // Order
 app.get('/order', orderRouter.findAll)
 app.get('/order/user/:id', orderRouter.findAllByUser)
+app.get('/order/seller/:id', orderRouter.findAllBySeller)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
