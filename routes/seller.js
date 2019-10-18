@@ -92,4 +92,36 @@ router.addSeller = (req, res) => {
     })
 }
 
+/**
+ * PUT
+ * updateSeller - update the info of a specific document through ':id'
+ * @param req - should contain parameter: id
+ * @param res
+ */
+router.updateSeller = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    Seller.findById(req.params.id, (err, seller) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            seller.name = req.body.name ? req.body.name : seller.name
+            seller.description = req.body.description ? req.body.description : seller.description
+            seller.deliveryTime = req.body.deliveryTime ? req.body.deliveryTime : seller.deliveryTime
+            seller.bulletin = req.body.bulletin ? req.body.bulletin : seller.bulletin
+            seller.supports = req.body.supports ? req.body.supports : seller.supports
+            seller.avatar = req.body.avatar ? req.body.avatar : seller.avatar
+            seller.pics = req.body.pics ? req.body.pics : seller.pics
+            seller.infos = req.body.infos ? req.body.infos : seller.infos
+            seller.save((err) => {
+                if (err) {
+                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                } else {
+                    res.send(JSON.stringify({code: ERR_OK, data: seller}, null, 5))
+                }
+            })
+        }
+    })
+}
+
 module.exports = router
