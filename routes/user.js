@@ -15,6 +15,7 @@ var config = require('../config')
 const superSecret = config.superSecret
 const ERR_OK = 0
 const ERR_NOK = -1
+const USER_NAT = 1
 const USER_DUP = 2
 const USER_NXT = 3
 const USER_WPW = 4
@@ -113,22 +114,35 @@ router.addUser = (req, res) => {
 router.updateUser = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
-    User.findById(req.params.id, (err, user) => {
-        if (err) {
-            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-        } else {
-            user.username = req.body.username ? req.body.username : user.username
-            user.password = req.body.password ? sha1(req.body.password) : user.password
-            user.phone = req.body.phone ? req.body.phone : user.phone
-            user.save((err) => {
-                if (err) {
-                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-                } else {
-                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Update User"}, null, 5))
-                }
-            })
-        }
-    })
+    // jwt
+    let token = req.body.token
+    if (!token) {
+        res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
+    } else {
+        jwt.verify(token, config.superSecret, (err, decoded) => {
+            if (err) {
+                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+            } else {
+                req.decoded = decoded
+
+                User.findOne({username: req.body.username}, (err, user) => {
+                    if (err) {
+                        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                    } else {
+                        user.password = req.body.password ? sha1(req.body.password) : user.password
+                        user.phone = req.body.phone ? req.body.phone : user.phone
+                        user.save((err) => {
+                            if (err) {
+                                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                            } else {
+                                res.send(JSON.stringify({code: ERR_OK, message: "Successfully Update User"}, null, 5))
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
 }
 
 /**
