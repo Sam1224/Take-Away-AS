@@ -201,20 +201,34 @@ router.deleteSeller = (req, res) => {
 router.updateGoods = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
-    Seller.findById(req.params.id, (err, seller) => {
-        if (err) {
-            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-        } else {
-            seller.goods = req.body.goods ? req.body.goods : seller.goods
-            seller.save((err) => {
-                if (err) {
-                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-                } else {
-                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Update Goods"}, null, 5))
-                }
-            })
-        }
-    })
+    // jwt
+    let token = req.body.token
+    if (!token) {
+        res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
+    } else {
+        jwt.verify(token, config.superSecret, (err, decoded) => {
+            if (err) {
+                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+            } else {
+                req.decoded = decoded
+
+                Seller.findById(req.params.id, (err, seller) => {
+                    if (err) {
+                        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                    } else {
+                        seller.goods = req.body.goods ? req.body.goods : seller.goods
+                        seller.save((err) => {
+                            if (err) {
+                                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                            } else {
+                                res.send(JSON.stringify({code: ERR_OK, message: "Successfully Update Goods"}, null, 5))
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
 }
 
 /**
