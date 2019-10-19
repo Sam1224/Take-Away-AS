@@ -48,7 +48,7 @@ app.delete('/user/pay', userRouter.deletePay)
 app.delete('/user/:id', userRouter.deleteUser)
 app.post('/user/address', userRouter.addAddress)
 app.post('/user/pay', userRouter.addPay)
-app.post('/user/:id/favorite', userRouter.addFavorite)
+app.post('/user/favorite', userRouter.addFavorite)
 app.delete('/user/:id/favorite', userRouter.deleteFavorite)
 app.post('/login', userRouter.login)
 
