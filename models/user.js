@@ -12,7 +12,8 @@ const user = Schema({
         phone: {type: Number, required: true},
         address: [{type: String}],
         pay: [{type: Number}],
-        favorite: [{type: String}]
+        favorite: [{type: String}],
+        usertype: [{type: Number, default: 1}]
     },
     {collection: 'user'})
 

@@ -14,7 +14,8 @@ const users = [
         "pay": [
             4319472635034936
         ],
-        "favorite": ["5da9c711dee75121474b0efc"]
+        "favorite": ["5da9c711dee75121474b0efc"],
+        "usertype": 1
     },
     {
         "username": "xqx",
@@ -26,6 +27,16 @@ const users = [
         "pay": [
             6228480395827429378
         ],
-        "favorite": []
+        "favorite": [],
+        "usertype": 1
+    },
+    {
+        "username": "admin",
+        "password": "admin",
+        "phone": "353894889596",
+        "address": [],
+        "pay": [],
+        "favorite": [],
+        "usertype": 0
     }
 ]
