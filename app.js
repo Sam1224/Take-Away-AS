@@ -45,11 +45,11 @@ app.post('/user', userRouter.addUser)
 app.put('/user', userRouter.updateUser)
 app.delete('/user/address', userRouter.deleteAddress)
 app.delete('/user/pay', userRouter.deletePay)
+app.delete('/user/favorite', userRouter.deleteFavorite)
 app.delete('/user/:id', userRouter.deleteUser)
 app.post('/user/address', userRouter.addAddress)
 app.post('/user/pay', userRouter.addPay)
 app.post('/user/favorite', userRouter.addFavorite)
-app.delete('/user/:id/favorite', userRouter.deleteFavorite)
 app.post('/login', userRouter.login)
 
 // Order
