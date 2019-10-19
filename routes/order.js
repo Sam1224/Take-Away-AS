@@ -138,13 +138,27 @@ router.findAllBySeller = (req, res) => {
 router.findOne = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
-    Order.find({"_id": req.params.id}, (err, order) => {
-        if (err) {
-            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-        } else {
-            res.send(JSON.stringify({code: ERR_OK, data: order}, null, 5))
-        }
-    })
+    // jwt
+    let token = req.body.token
+    if (!token) {
+        res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
+    } else {
+        jwt.verify(token, config.superSecret, (err, decoded) => {
+            if (err) {
+                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+            } else {
+                req.decoded = decoded
+
+                Order.find({"_id": req.params.id}, (err, order) => {
+                    if (err) {
+                        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                    } else {
+                        res.send(JSON.stringify({code: ERR_OK, data: order}, null, 5))
+                    }
+                })
+            }
+        })
+    }
 }
 
 /**
