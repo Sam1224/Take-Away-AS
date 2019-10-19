@@ -311,51 +311,65 @@ router.addRating = (req, res) => {
 router.deleteRating = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
-    Seller.findById(req.params.id, (err, seller) => {
-        if (err) {
-            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-        } else {
-            let rating = {}
-            rating.username = req.body.username
-            rating.deliveryTime = req.body.deliveryTime
-            rating.score = req.body.score
-            rating.rateType = req.body.rateType
-            rating.text = req.body.text
-            rating.avatar = req.body.avatar
-            rating.recommend = req.body.recommend
-            Seller.update({_id: seller._id}, {$pull: {ratings: rating}}, (err) => {
-                if (err) {
-                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-                } else {
-                    // should also update rankRate, serviceScore and score
-                    let ratings = seller.ratings
-                    let len = ratings.length
-                    let rankRate = 0
-                    let serviceScore = 0
-                    if (len > 0) {
-                        ratings.forEach((rating) => {
-                            if (parseInt(rating.rateType) === 0) {
-                                rankRate += 1
+    // jwt
+    let token = req.body.token
+    if (!token) {
+        res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
+    } else {
+        jwt.verify(token, config.superSecret, (err, decoded) => {
+            if (err) {
+                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+            } else {
+                req.decoded = decoded
+
+                Seller.findById(req.params.id, (err, seller) => {
+                    if (err) {
+                        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                    } else {
+                        let rating = {}
+                        rating.username = req.body.username
+                        rating.deliveryTime = req.body.deliveryTime
+                        rating.score = req.body.score
+                        rating.rateType = req.body.rateType
+                        rating.text = req.body.text
+                        rating.avatar = req.body.avatar
+                        rating.recommend = req.body.recommend
+                        Seller.update({_id: seller._id}, {$pull: {ratings: rating}}, (err) => {
+                            if (err) {
+                                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                            } else {
+                                // should also update rankRate, serviceScore and score
+                                let ratings = seller.ratings
+                                let len = ratings.length
+                                let rankRate = 0
+                                let serviceScore = 0
+                                if (len > 0) {
+                                    ratings.forEach((rating) => {
+                                        if (parseInt(rating.rateType) === 0) {
+                                            rankRate += 1
+                                        }
+                                        serviceScore += parseFloat(rating.score)
+                                    })
+                                    rankRate = ((rankRate / len) * 100).toFixed(1)
+                                    serviceScore = (serviceScore / len).toFixed(1)
+                                }
+                                seller.serviceScore = serviceScore
+                                seller.rankRate = rankRate
+                                seller.score = ((parseFloat(serviceScore)+ parseFloat(seller.foodScore)) / 2).toFixed(1)
+                                seller.save((err) => {
+                                    if (err) {
+                                        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                                    } else {
+                                        res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete Rating"}, null, 5))
+                                    }
+                                })
                             }
-                            serviceScore += parseFloat(rating.score)
                         })
-                        rankRate = ((rankRate / len) * 100).toFixed(1)
-                        serviceScore = (serviceScore / len).toFixed(1)
                     }
-                    seller.serviceScore = serviceScore
-                    seller.rankRate = rankRate
-                    seller.score = ((parseFloat(serviceScore)+ parseFloat(seller.foodScore)) / 2).toFixed(1)
-                    seller.save((err) => {
-                        if (err) {
-                            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-                        } else {
-                            res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete Rating"}, null, 5))
-                        }
-                    })
-                }
-            })
-        }
-    })
+                })
+            }
+        })
+    }
 }
 
 module.exports = router
