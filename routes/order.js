@@ -8,10 +8,18 @@ var mongoose = require('mongoose')
 var Order = require('../models/order')
 var Seller = require('../models/seller')
 var router = express.Router()
+var sha1 = require('sha1')
+var jwt = require('jsonwebtoken')
+var config = require('../config')
 
 // Constant
+const superSecret = config.superSecret
 const ERR_OK = 0
 const ERR_NOK = -1
+const USER_NAT = 1
+const USER_DUP = 2
+const USER_NXT = 3
+const USER_WPW = 4
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/takeawayapp', {useNewUrlParser: true, useUnifiedTopology: true})
@@ -34,13 +42,27 @@ db.once('open', function () {
 router.findAll = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
-    Order.find((err, orders) => {
-        if (err) {
-            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-        } else {
-            res.send(JSON.stringify({code: ERR_OK, data: orders}, null, 5))
-        }
-    })
+    // jwt
+    let token = req.body.token
+    if (!token) {
+        res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
+    } else {
+        jwt.verify(token, config.superSecret, (err, decoded) => {
+            if (err) {
+                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+            } else {
+                req.decoded = decoded
+
+                Order.find((err, orders) => {
+                    if (err) {
+                        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                    } else {
+                        res.send(JSON.stringify({code: ERR_OK, data: orders}, null, 5))
+                    }
+                })
+            }
+        })
+    }
 }
 
 /**
