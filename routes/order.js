@@ -217,13 +217,27 @@ router.addOrder = (req, res) => {
 router.deleteOrder = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
-    Order.findByIdAndRemove(req.params.id, (err, order) => {
-        if (err) {
-            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-        } else {
-            res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete Order"}, null, 5))
-        }
-    })
+    // jwt
+    let token = req.body.token
+    if (!token) {
+        res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
+    } else {
+        jwt.verify(token, config.superSecret, (err, decoded) => {
+            if (err) {
+                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+            } else {
+                req.decoded = decoded
+
+                Order.findByIdAndRemove(req.params.id, (err, order) => {
+                    if (err) {
+                        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                    } else {
+                        res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete Order"}, null, 5))
+                    }
+                })
+            }
+        })
+    }
 }
 
 /**
