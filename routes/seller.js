@@ -181,7 +181,6 @@ router.addRating = (req, res) => {
         if (err) {
             res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
         } else {
-            let ratings = seller.ratings
             let rating = {}
             rating.username = req.body.username
             rating.rateTime = new Date().getTime()
@@ -195,7 +194,31 @@ router.addRating = (req, res) => {
                 if (err) {
                     res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
                 } else {
-                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Rating"}, null, 5))
+                    // should also update rankRate, serviceScore and score
+                    let ratings = seller.ratings
+                    let len = ratings.length
+                    let rankRate = 0
+                    let serviceScore = 0
+                    if (len > 0) {
+                        ratings.forEach((rating) => {
+                            if (parseInt(rating.rateType) === 0) {
+                                rankRate += 1
+                            }
+                            serviceScore += parseFloat(rating.score)
+                        })
+                        rankRate = ((rankRate / len) * 100).toFixed(1)
+                        serviceScore = (serviceScore / len).toFixed(1)
+                    }
+                    seller.serviceScore = serviceScore
+                    seller.rankRate = rankRate
+                    seller.score = ((parseFloat(serviceScore)+ parseFloat(seller.foodScore)) / 2).toFixed(1)
+                    seller.save((err) => {
+                        if (err) {
+                            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                        } else {
+                            res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Rating"}, null, 5))
+                        }
+                    })
                 }
             })
         }
