@@ -7,10 +7,17 @@ var express = require('express')
 var mongoose = require('mongoose')
 var Seller = require('../models/seller')
 var router = express.Router()
+var jwt = require('jsonwebtoken')
+var config = require('../config')
 
 // Constant
+const superSecret = config.superSecret
 const ERR_OK = 0
 const ERR_NOK = -1
+const USER_NAT = 1
+const USER_DUP = 2
+const USER_NXT = 3
+const USER_WPW = 4
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/takeawayapp', {useNewUrlParser: true, useUnifiedTopology: true})
@@ -70,27 +77,41 @@ router.findOne = (req, res) => {
 router.addSeller = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
-    var seller = new Seller()
+    // jwt
+    let token = req.body.token
+    if (!token) {
+        res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
+    } else {
+        jwt.verify(token, config.superSecret, (err, decoded) => {
+            if (err) {
+                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+            } else {
+                req.decoded = decoded
 
-    seller.name = req.body.name
-    seller.description = req.body.description
-    seller.deliveryTime = req.body.deliveryTime
-    seller.bulletin = req.body.bulletin
-    seller.supports = req.body.supports
-    seller.avatar = req.body.avatar
-    seller.pics = req.body.pics
-    seller.infos = req.body.infos
-    // At first, seller should not have goods and ratings
-    seller.goods = []
-    seller.ratings = []
+                var seller = new Seller()
 
-    seller.save((err) => {
-        if (err) {
-            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-        } else {
-            res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Seller"}, null, 5))
-        }
-    })
+                seller.name = req.body.name
+                seller.description = req.body.description
+                seller.deliveryTime = req.body.deliveryTime
+                seller.bulletin = req.body.bulletin
+                seller.supports = req.body.supports
+                seller.avatar = req.body.avatar
+                seller.pics = req.body.pics
+                seller.infos = req.body.infos
+                // At first, seller should not have goods and ratings
+                seller.goods = []
+                seller.ratings = []
+
+                seller.save((err) => {
+                    if (err) {
+                        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                    } else {
+                        res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Seller"}, null, 5))
+                    }
+                })
+            }
+        })
+    }
 }
 
 /**
