@@ -12,6 +12,7 @@ var sha1 = require('sha1')
 // Constant
 const ERR_OK = 0
 const ERR_NOK = -1
+const USER_DUP = 1
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/takeawayapp', {useNewUrlParser: true, useUnifiedTopology: true})
@@ -70,19 +71,30 @@ router.findOne = (req, res) => {
 router.addUser = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
-    var user = new User()
-    user.username = req.body.username
-    user.password = sha1(req.body.password)
-    user.phone = req.body.phone
-    user.address = []
-    user.pay = []
-    user.favorite = []
-
-    user.save((err) => {
+    // avoid duplication
+    User.findOne({username: req.body.username}, (err, user) => {
         if (err) {
             res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
         } else {
-            res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add User"}, null, 5))
+            if (user) {
+                res.send(JSON.stringify({code: USER_DUP, message: 'The username has been registered!'}, null, 5))
+            } else {
+                var user = new User()
+                user.username = req.body.username
+                user.password = sha1(req.body.password)
+                user.phone = req.body.phone
+                user.address = []
+                user.pay = []
+                user.favorite = []
+
+                user.save((err) => {
+                    if (err) {
+                        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                    } else {
+                        res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add User"}, null, 5))
+                    }
+                })
+            }
         }
     })
 }
