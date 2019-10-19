@@ -250,20 +250,34 @@ router.deleteAddress = (req, res) => {
 router.addPay = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
-    User.findById(req.params.id, (err, user) => {
-        if (err) {
-            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-        } else {
-            let pay = req.body.pay
-            User.update({_id: user._id}, {$addToSet: {pay: pay}}, (err) => {
-                if (err) {
-                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-                } else {
-                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Payment"}, null, 5))
-                }
-            })
-        }
-    })
+    // jwt
+    let token = req.body.token
+    if (!token) {
+        res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
+    } else {
+        jwt.verify(token, config.superSecret, (err, decoded) => {
+            if (err) {
+                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+            } else {
+                req.decoded = decoded
+
+                User.findOne({username: req.body.username}, (err, user) => {
+                    if (err) {
+                        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                    } else {
+                        let pay = req.body.pay
+                        User.update({_id: user._id}, {$addToSet: {pay: pay}}, (err) => {
+                            if (err) {
+                                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                            } else {
+                                res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Payment"}, null, 5))
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
 }
 
 /**
