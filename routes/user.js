@@ -8,11 +8,16 @@ var mongoose = require('mongoose')
 var User = require('../models/user')
 var router = express.Router()
 var sha1 = require('sha1')
+var jwt = require('jsonwebtoken')
+var config = require('../config')
 
 // Constant
+const superSecret = config.superSecret
 const ERR_OK = 0
 const ERR_NOK = -1
-const USER_DUP = 1
+const USER_DUP = 2
+const USER_NXT = 3
+const USER_WPW = 4
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/takeawayapp', {useNewUrlParser: true, useUnifiedTopology: true})
@@ -290,6 +295,36 @@ router.deleteFavorite = (req, res) => {
                     res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete Favorite"}, null, 5))
                 }
             })
+        }
+    })
+}
+
+/**
+ * POST
+ * login - login and generate a token
+ * @param req
+ * @param res
+ */
+router.login = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    User.findOne({username: req.body.username}, (err, user) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            if (!user) {
+                res.send(JSON.stringify({code: USER_NXT, message: 'The username is not registered'}, null, 5))
+            } else {
+                if (user.password !== sha1(req.body.password)) {
+                    res.send(JSON.stringify({code: USER_WPW, message: 'The password is wrong'}, null, 5))
+                } else {
+                    let token = jwt.sign({username: user.username}, superSecret, {
+                        // 1 hour
+                        expiresIn: 3600
+                    })
+                    res.send(JSON.stringify({code: ERR_OK, token: token, message: 'Successfully login, use your token'}, null, 5))
+                }
+            }
         }
     })
 }

@@ -16,9 +16,6 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// set a global variable for jwt
-app.set('superSecret', 'takeawayapp')
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -53,6 +50,7 @@ app.post('/user/:id/pay', userRouter.addPay)
 app.delete('/user/:id/pay', userRouter.deletePay)
 app.post('/user/:id/favorite', userRouter.addFavorite)
 app.delete('/user/:id/favorite', userRouter.deleteFavorite)
+app.post('/login', userRouter.login)
 
 // Order
 app.get('/order', orderRouter.findAll)
