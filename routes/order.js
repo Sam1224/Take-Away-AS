@@ -170,28 +170,42 @@ router.findOne = (req, res) => {
 router.addOrder = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
-    var order = new Order()
-    order.user = req.body.user
-    order.seller = req.body.seller
-    order.phone = req.body.phone
-    order.address = req.body.address
-    order.note = req.body.note
-    // 0 - to be commented, 1 - commented
-    order.status = 0
-    order.foods = req.body.foods
-    let totalPrice = 0
-    order.foods.forEach((food) => {
-        totalPrice += food.price * food.quantity
-    })
-    order.totalPrice = totalPrice
+    // jwt
+    let token = req.body.token
+    if (!token) {
+        res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
+    } else {
+        jwt.verify(token, config.superSecret, (err, decoded) => {
+            if (err) {
+                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+            } else {
+                req.decoded = decoded
 
-    order.save((err) => {
-        if (err) {
-            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-        } else {
-            res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Order"}, null, 5))
-        }
-    })
+                var order = new Order()
+                order.user = req.body.user
+                order.seller = req.body.seller
+                order.phone = req.body.phone
+                order.address = req.body.address
+                order.note = req.body.note
+                // 0 - to be commented, 1 - commented
+                order.status = 0
+                order.foods = req.body.foods
+                let totalPrice = 0
+                order.foods.forEach((food) => {
+                    totalPrice += food.price * food.quantity
+                })
+                order.totalPrice = totalPrice
+
+                order.save((err) => {
+                    if (err) {
+                        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                    } else {
+                        res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Order"}, null, 5))
+                    }
+                })
+            }
+        })
+    }
 }
 
 /**
