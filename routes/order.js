@@ -241,46 +241,61 @@ router.deleteOrder = (req, res) => {
 }
 
 /**
- *
+ * PUT
+ * commentOrder
  * @param req
  * @param res
  */
 router.commentOrder = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
-    Order.findById(req.params.id, (err, order) => {
-        if (err) {
-            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-        } else {
-            // add a rating to seller
-            let rating = {}
-            let seller = req.body.seller
-            rating.username = req.body.username
-            rating.rateTime = new Date().getTime()
-            rating.deliveryTime = req.body.deliveryTime
-            rating.score = req.body.score
-            rating.rateType = req.body.rateType
-            rating.text = req.body.text
-            rating.avatar = req.body.avatar
-            rating.recommend = req.body.recommend
-            Seller.update({_id: seller}, {$addToSet: {ratings: rating}}, (err) => {
-                if (err) {
-                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-                } else {
-                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Rating"}, null, 5))
-                }
-            })
+    // jwt
+    let token = req.body.token
+    if (!token) {
+        res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
+    } else {
+        jwt.verify(token, config.superSecret, (err, decoded) => {
+            if (err) {
+                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+            } else {
+                req.decoded = decoded
 
-            order.status = 1
-            order.save((err) => {
-                if (err) {
-                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-                } else {
-                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Update Order"}, null, 5))
-                }
-            })
-        }
-    })
+                Order.findById(req.params.id, (err, order) => {
+                    if (err) {
+                        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                    } else {
+                        // add a rating to seller
+                        let rating = {}
+                        let seller = req.body.seller
+                        rating.username = req.body.username
+                        rating.rateTime = new Date().getTime()
+                        rating.deliveryTime = req.body.deliveryTime
+                        rating.score = req.body.score
+                        rating.rateType = req.body.rateType
+                        rating.text = req.body.text
+                        rating.avatar = req.body.avatar
+                        rating.recommend = req.body.recommend
+                        Seller.update({_id: seller}, {$addToSet: {ratings: rating}}, (err) => {
+                            if (err) {
+                                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                            } else {
+                                res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Rating"}, null, 5))
+                            }
+                        })
+
+                        order.status = 1
+                        order.save((err) => {
+                            if (err) {
+                                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                            } else {
+                                res.send(JSON.stringify({code: ERR_OK, message: "Successfully Update Order"}, null, 5))
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    }
 }
 
 module.exports = router
