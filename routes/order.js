@@ -4,7 +4,6 @@
  * @Version: 1.0
  **/
 var express = require('express')
-var mongoose = require('mongoose')
 var Order = require('../models/order')
 var Seller = require('../models/seller')
 var router = express.Router()
@@ -20,18 +19,6 @@ const USER_NAT = 1
 const USER_DUP = 2
 const USER_NXT = 3
 const USER_WPW = 4
-
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/takeawayapp', {useNewUrlParser: true, useUnifiedTopology: true})
-
-var db = mongoose.connection
-
-db.on('error', (err) => {
-    console.log('connection error', err)
-})
-db.once('open', function () {
-    console.log('connected to database')
-})
 
 /**
  * GET

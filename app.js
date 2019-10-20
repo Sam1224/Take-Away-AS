@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var stylus = require('stylus');
+var mongoose = require('mongoose')
 
 var indexRouter = require('./routes/index')
 var sellerRouter = require('./routes/seller')
@@ -76,5 +77,19 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// Connect to MongoDB
+// const url = 'mongodb://localhost:27017/takeawayapp'
+const url = 'mongodb://sam:yyq19981212@ds135128.mlab.com:35128/heroku_lrcxfxw8'
+mongoose.connect(url)
+
+var db = mongoose.connection;
+
+db.on('error', (err) => {
+  console.log('connection error', err);
+})
+db.once('open', function () {
+  console.log('connected to database');
+})
 
 module.exports = app;
