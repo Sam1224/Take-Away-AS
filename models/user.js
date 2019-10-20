@@ -13,7 +13,7 @@ const user = Schema({
         address: [{type: String}],
         pay: [{type: Number}],
         favorite: [{type: String}],
-        usertype: [{type: Number, default: 1}]
+        usertype: {type: Number, default: 1}
     },
     {collection: 'user'})
 
