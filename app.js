@@ -80,7 +80,7 @@ app.use(function(err, req, res, next) {
 
 // Connect to MongoDB
 // const url = 'mongodb://localhost:27017/takeawayapp'
-const url = 'mongodb://sam:yyq19981212@ds135128.mlab.com:35128/heroku_lrcxfxw8'
+const url = 'mongodb://sam:yyq19981212@ds137488.mlab.com:37488/heroku_62d2k1tf'
 mongoose.connect(url)
 
 var db = mongoose.connection;
