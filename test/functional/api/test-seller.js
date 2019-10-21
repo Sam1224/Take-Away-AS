@@ -78,21 +78,21 @@ describe('Seller', () => {
             "Opening hours: 10:00-20:30"
         ]
         await seller.save()
-        seller = new Seller()
-        seller.token = token
-        seller.name = 'test2'
-        seller.description = 'Meituan Delivery'
-        seller.deliveryTime = 38
-        seller.bulletin = 'Test 2'
-        seller.supports = []
-        seller.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg'
-        seller.pics = [
+        let seller1 = new Seller()
+        seller1.token = token
+        seller1.name = 'test2'
+        seller1.description = 'Meituan Delivery'
+        seller1.deliveryTime = 38
+        seller1.bulletin = 'Test 2'
+        seller1.supports = []
+        seller1.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg'
+        seller1.pics = [
             "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
         ]
-        seller.infos = [
+        seller1.infos = [
             "Opening hours: 10:00-20:30"
         ]
-        await seller.save()
+        await seller1.save()
         seller = await Seller.findOne({name: 'test1'})
         validID = seller._id
     })
@@ -133,6 +133,18 @@ describe('Seller', () => {
                     .expect(200)
                     .then((res) => {
                         expect(res.body.data[0]).to.have.property("name", "test1")
+                    })
+            })
+        })
+        describe('when the id is invalid', () => {
+            it('should return an empty array', () => {
+                return request(server)
+                    .get('/seller/1')
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .then((res) => {
+                        expect(res.body.code).to.equal(-1)
                     })
             })
         })
