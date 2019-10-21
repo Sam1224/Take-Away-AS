@@ -94,58 +94,66 @@ describe('Seller', () => {
         ]
         await seller1.save()
         seller = await Seller.findOne({name: 'test1'})
-        validID = seller._id
+        setTimeout(() => {
+            validID = seller._id
+        }, 500)
     })
 
     describe('GET /seller', () => {
         it('should GET all the sellers', () => {
-            return request(server)
-                .get("/seller")
-                .set("Accept", "application/json")
-                .expect("Content-Type", /json/)
-                .expect(200)
-                .then((res) => {
-                    expect(res.body.code).to.equal(0)
-                    expect(res.body.data).to.be.a('array')
-                    expect(res.body.data.length).to.equal(2)
-                    let result = _.map(res.body.data, (seller) => {
-                        return {
-                            name: seller.name
-                        }
+            setTimeout(() => {
+                return request(server)
+                    .get("/seller")
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .then((res) => {
+                        expect(res.body.code).to.equal(0)
+                        expect(res.body.data).to.be.a('array')
+                        expect(res.body.data.length).to.equal(2)
+                        let result = _.map(res.body.data, (seller) => {
+                            return {
+                                name: seller.name
+                            }
+                        })
+                        expect(result).to.deep.include({
+                            name: 'test1'
+                        })
+                        expect(result).to.deep.include({
+                            name: 'test2'
+                        })
                     })
-                    expect(result).to.deep.include({
-                        name: 'test1'
-                    })
-                    expect(result).to.deep.include({
-                        name: 'test2'
-                    })
-                })
+            }, 1000)
         })
     })
 
     describe('GET /seller/:id', () => {
         describe('when the id is valid', () => {
             it('should return the matching seller', () => {
-                return request(server)
-                    .get(`/seller/${validID}`)
-                    .set("Accept", "application/json")
-                    .expect("Content-Type", /json/)
-                    .expect(200)
-                    .then((res) => {
-                        expect(res.body.data[0]).to.have.property("name", "test1")
-                    })
+                setTimeout(() => {
+                    return request(server)
+                        .get(`/seller/${validID}`)
+                        .set("Accept", "application/json")
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.data[0]).to.have.property("name", "test1")
+                        })
+                }, 1000)
             })
         })
         describe('when the id is invalid', () => {
             it('should return an empty array', () => {
-                return request(server)
-                    .get('/seller/1')
-                    .set("Accept", "application/json")
-                    .expect("Content-Type", /json/)
-                    .expect(200)
-                    .then((res) => {
-                        expect(res.body.code).to.equal(-1)
-                    })
+                setTimeout(() => {
+                    return request(server)
+                        .get('/seller/1')
+                        .set("Accept", "application/json")
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(-1)
+                        })
+                },1000)
             })
         })
     })
@@ -172,14 +180,64 @@ describe('Seller', () => {
                     "1340, Unit 102, Block B, bottom business, longguan real estate building, Western Huilongguan Street, Changping, Beijing",
                     "Opening hours: 10:00-20:30"
                 ]
-                return request(server)
-                    .post("/seller")
-                    .send(seller)
-                    .expect(200)
-                    .then((res) => {
-                        expect(res.body.code).to.equal(1)
-                        expect(res.body.message).equals("Not Login Yet, Please Login")
+                setTimeout(() => {
+                    return request(server)
+                        .post("/seller")
+                        .send(seller)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(1)
+                            expect(res.body.message).equals("Not Login Yet, Please Login")
+                        })
+                }, 1000)
+            })
+        })
+        describe('when there is a jwt token', () => {
+            describe('when the token is expired', () => {
+                it('should return an expired error', () => {
+                    let seller = new Seller()
+                    token = jwt.sign({username: username}, superSecret, {
+                        // 1 s
+                        expiresIn: 1
                     })
+                    seller.token = token
+                    seller.name = 'test3'
+                    seller.description = 'Fengniao Delivery'
+                    seller.deliveryTime = 40
+                    seller.bulletin = 'Test 1'
+                    seller.supports = [{
+                        'type': 1,
+                        'description': 'VC orange juice 80% discount'
+                    }]
+                    seller.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg'
+                    seller.pics = [
+                        "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
+                    ]
+                    seller.infos = [
+                        "Invoice supported, please fill in the invoice title when ordered",
+                        "Class: Other cuisine, porridge store",
+                        "1340, Unit 102, Block B, bottom business, longguan real estate building, Western Huilongguan Street, Changping, Beijing",
+                        "Opening hours: 10:00-20:30"
+                    ]
+                    setTimeout(() => {
+                        return request(server)
+                            .post("/seller")
+                            .send(seller)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(-1)
+                                expect(res.body.error.name).equals("TokenExpiredError")
+                            })
+                    }, 1000)
+                })
+                after(() => {
+                    return request(server)
+                        .get("/seller")
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.data.length).to.equal(2)
+                        })
+                })
             })
         })
     })
