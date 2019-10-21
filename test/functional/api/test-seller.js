@@ -514,4 +514,22 @@ describe('Seller', () => {
             })
         })
     })
+
+    describe('DELETE /seller/:id', () => {
+        describe('when there is no jwt token', () => {
+            it('should require to login if it does not have a jwt token', () => {
+                let seller = {}
+                setTimeout(() => {
+                    return request(server)
+                        .delete(`/seller/${validID}`)
+                        .send(seller)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(1)
+                            expect(res.body.message).equals("Not Login Yet, Please Login")
+                        })
+                }, 1000)
+            })
+        })
+    })
 })
