@@ -712,7 +712,7 @@ describe('Seller', () => {
                     }]
                     setTimeout(() => {
                         return request(server)
-                            .delete(`/seller/${validID}`)
+                            .put(`/seller/${validID}/goods`)
                             .send(seller)
                             .then((res) => {
                                 expect(res.body.code).to.equal(-1)
@@ -727,6 +727,69 @@ describe('Seller', () => {
                             .expect(200)
                             .then((res) => {
                                 expect(res.body.data.length).to.equal(2)
+                            })
+                    }, 1000)
+                })
+            })
+            describe('when the token is valid', () => {
+                it('should return a message of successfully update goods of seller', () => {
+                    let seller = new Seller()
+                    seller.token = token
+                    seller.goods = [{
+                        "name": "Hot Sales",
+                        "types": -1,
+                        "foods": [
+                            {
+                                "name": "Egg & Pork Congee",
+                                "price": 10,
+                                "oldPrice": "",
+                                "description": "Salty porridge",
+                                "info": "A bowl of preserved egg thin meat porridge, always I go to the porridge shop when the selection of fragrant soft, full belly warm heart, preserved egg Q bomb and thin meat slippery with porridge fragrant overflow at full mouth, let a person drink such a bowl of porridge also feel satisfied.",
+                                "icon": "http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114",
+                                "image": "http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750"
+                            }
+                        ]
+                    }]
+                    setTimeout(() => {
+                        return request(server)
+                            .put(`/seller/${validID}/goods`)
+                            .send(seller)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                expect(res.body.message).equals("Successfully Delete Seller")
+                            })
+                    }, 1000)
+                })
+                after(() => {
+                    setTimeout(() => {
+                        return request(server)
+                            .get("/seller")
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.data.length).to.equal(2)
+                                let result = _.map(res.body.data, (seller) => {
+                                    return {
+                                        goods: seller.goods
+                                    }
+                                })
+                                expect(result).to.deep.include({
+                                    goods: [{
+                                        "name": "Hot Sales",
+                                        "types": -1,
+                                        "foods": [
+                                            {
+                                                "name": "Egg & Pork Congee",
+                                                "price": 10,
+                                                "oldPrice": "",
+                                                "description": "Salty porridge",
+                                                "info": "A bowl of preserved egg thin meat porridge, always I go to the porridge shop when the selection of fragrant soft, full belly warm heart, preserved egg Q bomb and thin meat slippery with porridge fragrant overflow at full mouth, let a person drink such a bowl of porridge also feel satisfied.",
+                                                "icon": "http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114",
+                                                "image": "http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750"
+                                            }
+                                        ]
+                                    }]
+                                })
                             })
                     }, 1000)
                 })
