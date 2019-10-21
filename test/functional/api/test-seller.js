@@ -645,5 +645,52 @@ describe('Seller', () => {
                 }, 1000)
             })
         })
+        describe('when there is a jwt token', () => {
+            describe('when the token is expired', () => {
+                it('should return an expired error', () => {
+                    let seller = new Seller()
+                    token = jwt.sign({username: username}, superSecret, {
+                        // 1 s
+                        expiresIn: 1
+                    })
+                    seller.token = token
+                    seller.goods = [{
+                        "name": "Hot Sales",
+                        "types": -1,
+                        "foods": [
+                            {
+                                "name": "Egg & Pork Congee",
+                                "price": 10,
+                                "oldPrice": "",
+                                "description": "Salty porridge",
+                                "info": "A bowl of preserved egg thin meat porridge, always I go to the porridge shop when the selection of fragrant soft, full belly warm heart, preserved egg Q bomb and thin meat slippery with porridge fragrant overflow at full mouth, let a person drink such a bowl of porridge also feel satisfied.",
+                                "icon": "http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114",
+                                "image": "http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750"
+                            }
+                        ]
+                    }]
+                    setTimeout(() => {
+                        return request(server)
+                            .put(`/seller/${validID}/goods`)
+                            .send(seller)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(-1)
+                                expect(res.body.error.name).equals("TokenExpiredError")
+                            })
+                    }, 1000)
+                })
+                after(() => {
+                    setTimeout(() => {
+                        return request(server)
+                            .get("/seller")
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.data.length).to.equal(2)
+                            })
+                    }, 1000)
+                })
+            })
+        })
     })
 })
