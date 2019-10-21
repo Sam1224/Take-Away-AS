@@ -281,6 +281,58 @@ describe('Seller', () => {
                         })
                 })
             })
+            describe('when the token is valid', () => {
+                it('should return a message of successfully add seller', () => {
+                    let seller = {}
+                    seller.token = token
+                    seller.name = 'test3'
+                    seller.description = 'Fengniao Delivery'
+                    seller.deliveryTime = 40
+                    seller.bulletin = 'Test 1'
+                    seller.supports = [{
+                        'type': 1,
+                        'description': 'VC orange juice 80% discount'
+                    }]
+                    seller.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg'
+                    seller.pics = [
+                        "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
+                    ]
+                    seller.infos = [
+                        "Invoice supported, please fill in the invoice title when ordered",
+                        "Class: Other cuisine, porridge store",
+                        "1340, Unit 102, Block B, bottom business, longguan real estate building, Western Huilongguan Street, Changping, Beijing",
+                        "Opening hours: 10:00-20:30"
+                    ]
+                    setTimeout(() => {
+                        return request(server)
+                            .post("/seller")
+                            .send(seller)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                expect(res.body.message).equals("Successfully Add Seller")
+                            })
+                    }, 1000)
+                })
+                after(() => {
+                    setTimeout(() => {
+                        return request(server)
+                            .get("/seller")
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.data.length).to.equal(3)
+                                let result = _.map(res.body.data, (seller) => {
+                                    return {
+                                        name: seller.name
+                                    }
+                                })
+                                expect(result).to.deep.include({
+                                    name: 'test3'
+                                })
+                            })
+                    }, 1000)
+                })
+            })
         })
     })
 })
