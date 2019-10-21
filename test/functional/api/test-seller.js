@@ -585,6 +585,32 @@ describe('Seller', () => {
                         })
                 })
             })
+            describe('when the token is valid', () => {
+                it('should return a message of successfully delete seller', () => {
+                    let seller = {}
+                    seller.token = token
+                    setTimeout(() => {
+                        return request(server)
+                            .delete(`/seller/${validID}`)
+                            .send(seller)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                expect(res.body.message).equals("Successfully Delete Seller")
+                            })
+                    }, 1000)
+                })
+                after(() => {
+                    setTimeout(() => {
+                        return request(server)
+                            .get("/seller")
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.data.length).to.equal(1)
+                            })
+                    }, 1000)
+                })
+            })
         })
     })
 })
