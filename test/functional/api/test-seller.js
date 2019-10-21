@@ -96,7 +96,7 @@ describe('Seller', () => {
         seller = await Seller.findOne({name: 'test1'})
         setTimeout(() => {
             validID = seller._id
-        }, 500)
+        }, 1000)
     })
 
     describe('GET /seller', () => {
@@ -610,6 +610,39 @@ describe('Seller', () => {
                             })
                     }, 1000)
                 })
+            })
+        })
+    })
+
+    describe('PUT /seller/:id/goods', () => {
+        describe('when there is no jwt token', () => {
+            it('should require to login if it does not have a jwt token', () => {
+                let seller = {}
+                seller.goods = [{
+                    "name": "Hot Sales",
+                    "types": -1,
+                    "foods": [
+                        {
+                            "name": "Egg & Pork Congee",
+                            "price": 10,
+                            "oldPrice": "",
+                            "description": "Salty porridge",
+                            "info": "A bowl of preserved egg thin meat porridge, always I go to the porridge shop when the selection of fragrant soft, full belly warm heart, preserved egg Q bomb and thin meat slippery with porridge fragrant overflow at full mouth, let a person drink such a bowl of porridge also feel satisfied.",
+                            "icon": "http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/114/h/114",
+                            "image": "http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750"
+                        }
+                    ]
+                }]
+                setTimeout(() => {
+                    return request(server)
+                        .put(`/seller/${validID}/goods`)
+                        .send(seller)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(1)
+                            expect(res.body.message).equals("Not Login Yet, Please Login")
+                        })
+                }, 1000)
             })
         })
     })
