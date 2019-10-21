@@ -122,4 +122,19 @@ describe('Seller', () => {
                 })
         })
     })
+
+    describe('GET /seller/:id', () => {
+        describe('when the id is valid', () => {
+            it('should return the matching seller', () => {
+                return request(server)
+                    .get(`/seller/${validID}`)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .then((res) => {
+                        expect(res.body.data[0]).to.have.property("name", "test1")
+                    })
+            })
+        })
+    })
 })
