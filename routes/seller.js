@@ -359,4 +359,36 @@ router.deleteRating = (req, res) => {
     }
 }
 
+/**
+ * POST
+ * fuzzySearch
+ * @param req
+ * @param res
+ */
+router.fuzzySearch = (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    var reg = `([\s\S]*?${req.body.keyword}[\s\S]*?)`
+    reg = new RegExp(reg, "gi")
+    Seller.find({
+        $or: [
+            {name: {$regex: reg}},
+            {description: {$regex: reg}},
+            {bulletin: {$regex: reg}},
+            {"supports.description": {$regex: reg}},
+            {infos: {$regex: reg}},
+            {"goods.name": {$regex: reg}},
+            {"goods.foods.name": {$regex: reg}},
+            {"goods.foods.description": {$regex: reg}},
+            {"goods.foods.info": {$regex: reg}}
+        ]
+    }, (err, sellers) => {
+        if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+        } else {
+            res.send(JSON.stringify({code: ERR_OK, data: sellers}, null, 5))
+        }
+    })
+}
+
 module.exports = router

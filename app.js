@@ -38,6 +38,7 @@ app.delete('/seller/:id', sellerRouter.deleteSeller)
 app.put('/seller/:id/goods', sellerRouter.updateGoods)
 app.post('/seller/:id/ratings', sellerRouter.addRating)
 app.delete('/seller/:id/ratings', sellerRouter.deleteRating)
+app.post('/seller/search', sellerRouter.fuzzySearch)
 
 // User
 app.get('/user', userRouter.findAll)
