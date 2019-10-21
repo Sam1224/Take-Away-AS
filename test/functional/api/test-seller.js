@@ -562,6 +562,29 @@ describe('Seller', () => {
                     }, 1000)
                 })
             })
+            describe('when the token is invalid', () => {
+                it('should return an invalid error', () => {
+                    let seller = {}
+                    seller.token = 't23123fhsja'
+                    setTimeout(() => {
+                        return request(server)
+                            .delete(`/seller/${validID}`)
+                            .send(seller)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(-1)
+                                expect(res.body.error.name).equals("JsonWebTokenError")
+                            })
+                    }, 1000)
+                })
+                after(() => {
+                    return request(server)
+                        .get("/seller")
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.data.length).to.equal(2)
+                        })
+                })
+            })
         })
     })
 })
