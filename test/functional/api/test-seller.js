@@ -49,4 +49,50 @@ describe('Seller', () => {
             console.log(err)
         }
     })
+
+    beforeEach(async () => {
+        try {
+            await Seller.deleteMany({})
+            let seller = new Seller()
+            seller.token = token
+            seller.name = 'test1'
+            seller.description = 'Fengniao Delivery'
+            seller.deliveryTime = 40
+            seller.bulletin = 'Test 1'
+            seller.supports = [{
+                'type': 1,
+                'description': 'VC orange juice 80% discount'
+            }]
+            seller.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg'
+            seller.pics = [
+                "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
+            ]
+            seller.infos = [
+                "Invoice supported, please fill in the invoice title when ordered",
+                "Class: Other cuisine, porridge store",
+                "1340, Unit 102, Block B, bottom business, longguan real estate building, Western Huilongguan Street, Changping, Beijing",
+                "Opening hours: 10:00-20:30"
+            ]
+            await seller.save()
+            seller = new Seller()
+            seller.token = token
+            seller.name = 'test2'
+            seller.description = 'Meituan Delivery'
+            seller.deliveryTime = 38
+            seller.bulletin = 'Test 2'
+            seller.supports = []
+            seller.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg'
+            seller.pics = [
+                "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
+            ]
+            seller.infos = [
+                "Opening hours: 10:00-20:30"
+            ]
+            await seller1.save()
+            seller = await Seller.findOne({name: 'test1'})
+            validID = seller._id
+        } catch (err) {
+            console.log(err)
+        }
+    })
 })

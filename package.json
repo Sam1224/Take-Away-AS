@@ -7,7 +7,6 @@
     "test": "cross-env NODE_ENV=test mocha --timeout 6000 test/functional/api/*.js --exit"
   },
   "dependencies": {
-    "chai": "^4.2.0",
     "cookie-parser": "~1.4.4",
     "cross-env": "^6.0.3",
     "debug": "~2.6.9",
@@ -17,12 +16,15 @@
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
-    "mocha": "^6.2.2",
-    "mongodb-memory-server": "^5.2.8",
     "mongoose": "^5.7.5",
     "morgan": "~1.9.1",
     "sha1": "^1.1.1",
-    "stylus": "0.54.5",
+    "stylus": "0.54.5"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^5.2.7",
+    "chai": "^4.0.2",
+    "mocha": "^6.2.0",
     "supertest": "^4.0.2"
   }
 }
