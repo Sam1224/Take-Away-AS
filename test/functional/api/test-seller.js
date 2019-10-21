@@ -531,5 +531,37 @@ describe('Seller', () => {
                 }, 1000)
             })
         })
+        describe('when there is a jwt token', () => {
+            describe('when the token is expired', () => {
+                it('should return an expired error', () => {
+                    let seller = new Seller()
+                    token = jwt.sign({username: username}, superSecret, {
+                        // 1 s
+                        expiresIn: 1
+                    })
+                    seller.token = token
+                    setTimeout(() => {
+                        return request(server)
+                            .delete(`/seller/${validID}`)
+                            .send(seller)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(-1)
+                                expect(res.body.error.name).equals("TokenExpiredError")
+                            })
+                    }, 1000)
+                })
+                after(() => {
+                    setTimeout(() => {
+                        return request(server)
+                            .get("/seller")
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.data.length).to.equal(2)
+                            })
+                    }, 1000)
+                })
+            })
+        })
     })
 })
