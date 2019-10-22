@@ -832,4 +832,27 @@ describe('User', () => {
             })
         })
     })
+
+    describe('POST /user/favorite', () => {
+        describe('when there is no jwt token', () => {
+            it('should require to login if it does not have a jwt token',  () => {
+                let user = {}
+                user.username = "user1"
+                user.pay = '5dac7c136c707500171b0724'
+                return request(server)
+                    .post('/user/favorite')
+                    .send(user)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .then((res) => {
+                        expect(res.body.code).to.equal(1)
+                        expect(res.body.message).equals("Not Login Yet, Please Login")
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            })
+        })
+    })
 })
