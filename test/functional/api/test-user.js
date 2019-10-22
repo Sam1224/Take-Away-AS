@@ -554,48 +554,48 @@ describe('User', () => {
                             })
                     })
                 })
-            })
-            describe('when the username is registered', () => {
-                it('should return a message of successfully delete address', () => {
-                    let user = {}
-                    user.token = token
-                    user.username = "user1"
-                    user.address = "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND"
-                    return request(server)
-                        .delete('/user/address')
-                        .send(user)
-                        .set("Accept", "application/json")
-                        .expect("Content-Type", /json/)
-                        .expect(200)
-                        .then((res) => {
-                            expect(res.body.code).to.equal(0)
-                            expect(res.body.message).equals("Successfully Delete Address")
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
-                })
-                after(() => {
-                    return request(server)
-                        .get('/user')
-                        .set("Accept", "application/json")
-                        .expect("Content-Type", /json/)
-                        .expect(200)
-                        .then((res) => {
-                            expect(res.body.code).to.equal(0)
-                            let result = _.map(res.body.data, (user) => {
-                                if (user.username === 'user1') {
-                                    return {
-                                        username: user.username,
-                                        address: user.address
-                                    }
-                                }
+                describe('when the username is registered', () => {
+                    it('should return a message of successfully delete address', () => {
+                        let user = {}
+                        user.token = token
+                        user.username = "user1"
+                        user.address = "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND"
+                        return request(server)
+                            .delete('/user/address')
+                            .send(user)
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                expect(res.body.message).equals("Successfully Delete Address")
                             })
-                            expect(result[0].address.length).to.equal(0)
-                        })
-                        .catch((err) => {
-                            console.log(err)
-                        })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
+                    after(() => {
+                        return request(server)
+                            .get('/user')
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                let result = _.map(res.body.data, (user) => {
+                                    if (user.username === 'user1') {
+                                        return {
+                                            username: user.username,
+                                            address: user.address
+                                        }
+                                    }
+                                })
+                                expect(result[0].address.length).to.equal(0)
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
                 })
             })
         })
