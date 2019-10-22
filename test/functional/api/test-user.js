@@ -281,6 +281,50 @@ describe('User', () => {
                             })
                     })
                 })
+                describe('when the username is registered', () => {
+                    it('should return a message of successfully update user', () => {
+                        let user = {}
+                        user.token = token
+                        user.username = "user1"
+                        user.password = "test1"
+                        user.phone = "1212"
+                        return request(server)
+                            .put(`/user`)
+                            .send(user)
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                expect(res.body.message).equals("Successfully Update User")
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
+                    after(() => {
+                        return request(server)
+                            .get('/user')
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                let result = _.map(res.body.data, (user) => {
+                                    if (user.username === 'user1') {
+                                        return {
+                                            username: user.username,
+                                            phone: user.phone
+                                        }
+                                    }
+                                })
+                                expect(result[0].phone).equals(1212)
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
+                })
             })
         })
     })

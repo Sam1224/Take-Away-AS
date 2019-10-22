@@ -119,6 +119,7 @@ router.updateUser = (req, res) => {
                         if (user.length === 0) {
                             res.send(JSON.stringify({code: USER_NXT, message: 'The username is not registered'}, null, 5))
                         } else {
+                            user = user[0]
                             user.password = req.body.password ? sha1(req.body.password) : user.password
                             user.phone = req.body.phone ? req.body.phone : user.phone
                             user.save((err) => {
