@@ -1046,6 +1046,39 @@ describe('Seller', () => {
                     }, 1000)
                 })
             })
+            describe('when the token is valid', () => {
+                it('should return a message of successfully add rating of seller', () => {
+                    let rating = {}
+                    rating.token = token
+                    rating.username = 'admin'
+                    rating.deliveryTime = 30
+                    rating.score = 5
+                    rating.rateType = 0
+                    rating.text = 'Porridge is very good, I often eat this one and will often order them, strongly recommended.'
+                    rating.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
+                    rating.recommend = ["Pumpkin Porridge"]
+                    setTimeout(() => {
+                        return request(server)
+                            .delete(`/seller/${validID}/ratings`)
+                            .send(rating)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                expect(res.body.message).equals("Successfully Delete Rating")
+                            })
+                    }, 1000)
+                })
+                after(() => {
+                    setTimeout(() => {
+                        return request(server)
+                            .get(`/seller/${validID}`)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.data.length).to.equal(0)
+                            })
+                    }, 1000)
+                })
+            })
         })
     })
 })
