@@ -69,11 +69,17 @@ describe('User', () => {
             user.username = "user1"
             user.password = "123456"
             user.phone = 1
+            user.address = ['test address']
+            user.pay = ['1']
+            user.favorite = ['1234']
             await user.save()
             let user1 = new User()
             user1.username = "user2"
             user1.password = "123456"
             user1.phone = 2
+            user.address = ['test address']
+            user.pay = ['1']
+            user.favorite = ['1234']
             await user1.save()
             user = await User.findOne({username: 'user1'})
             // setTimeout(() => {
@@ -471,14 +477,16 @@ describe('User', () => {
                             .then((res) => {
                                 expect(res.body.code).to.equal(0)
                                 let result = _.map(res.body.data, (user) => {
-                                    if (user.username === 'user1') {
-                                        return {
-                                            username: user.username,
-                                            address: user.address
-                                        }
+                                    return {
+                                        username: user.username,
+                                        address: user.address
                                     }
                                 })
-                                expect(result[0].address[0]).equals("APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND")
+                                if (result[0].username === 'user1') {
+                                    expect(result[0].address[1]).equals("APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND")
+                                } else if (result[1].username === 'user1') {
+                                    expect(result[1].address[1]).equals("APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND")
+                                }
                             })
                             .catch((err) => {
                                 console.log(err)
@@ -494,7 +502,7 @@ describe('User', () => {
             it('should require to login if it does not have a jwt token',  () => {
                 let user = {}
                 user.username = "test1"
-                user.address = "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND"
+                user.address = 'test address'
                 return request(server)
                     .delete(`/user/address`)
                     .send(user)
@@ -516,7 +524,7 @@ describe('User', () => {
                     let user = {}
                     user.token = "123"
                     user.username = "test1"
-                    user.address = "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND"
+                    user.address = 'test address'
                     return request(server)
                         .delete('/user/address')
                         .send(user)
@@ -538,7 +546,7 @@ describe('User', () => {
                         let user = {}
                         user.token = token
                         user.username = "ss"
-                        user.address = "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND"
+                        user.address = 'test address'
                         return request(server)
                             .delete('/user/address')
                             .send(user)
@@ -559,7 +567,7 @@ describe('User', () => {
                         let user = {}
                         user.token = token
                         user.username = "user1"
-                        user.address = "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND"
+                        user.address = 'test address'
                         return request(server)
                             .delete('/user/address')
                             .send(user)
@@ -702,7 +710,7 @@ describe('User', () => {
                                         }
                                     }
                                 })
-                                expect(result[0].pay.length).to.equal(1)
+                                expect(result[0].pay.length).to.equal(2)
                             })
                             .catch((err) => {
                                 console.log(err)
@@ -718,7 +726,7 @@ describe('User', () => {
             it('should require to login if it does not have a jwt token',  () => {
                 let user = {}
                 user.username = "user1"
-                user.pay = 6228480395827429378
+                user.pay = '1'
                 return request(server)
                     .delete('/user/pay')
                     .send(user)
@@ -740,7 +748,7 @@ describe('User', () => {
                     let user = {}
                     user.token = "123"
                     user.username = "user1"
-                    user.pay = 6228480395827429378
+                    user.pay = '1'
                     return request(server)
                         .delete('/user/pay')
                         .send(user)
@@ -762,7 +770,7 @@ describe('User', () => {
                         let user = {}
                         user.token = token
                         user.username = "ss"
-                        user.pay = 6228480395827429378
+                        user.pay = '1'
                         return request(server)
                             .delete('/user/pay')
                             .send(user)
@@ -772,6 +780,49 @@ describe('User', () => {
                             .then((res) => {
                                 expect(res.body.code).to.equal(3)
                                 expect(res.body.message).equals("The username is not registered")
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
+                })
+                describe('when the username is registered', () => {
+                    it('should return a message of successfully add pay', () => {
+                        let user = {}
+                        user.token = token
+                        user.username = "user1"
+                        user.pay = '1'
+                        return request(server)
+                            .delete('/user/pay')
+                            .send(user)
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                expect(res.body.message).equals("Successfully Delete Payment")
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
+                    after(() => {
+                        return request(server)
+                            .get('/user')
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                let result = _.map(res.body.data, (user) => {
+                                    if (user.username === 'user1') {
+                                        return {
+                                            username: user.username,
+                                            pay: user.pay
+                                        }
+                                    }
+                                })
+                                expect(result[0].pay.length).to.equal(0)
                             })
                             .catch((err) => {
                                 console.log(err)
