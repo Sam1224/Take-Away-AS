@@ -14,11 +14,13 @@ const config = require('../../../config')
 const MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer
 const Seller = require('../../../models/seller')
 const mongoose = require('mongoose')
+const {MongoClient} = require('mongodb')
 
 const _ = require('lodash')
 let server
 let mongod
 let db, validID
+let url, connection, collection
 
 // jwt parameters
 let username = "admin"
@@ -36,14 +38,14 @@ describe('Seller', () => {
         })
         // Async Trick - this ensures the database is created before
         // we try to connect to it or start the server
-        await mongod.getConnectionString()
-
-        mongoose.connect('mongodb://localhost:27017/takeawayapp', {
+        url = await mongod.getConnectionString()
+        connection = await MongoClient.connect(url, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
+        db = connection.db(await mongod.getDbName())
+        collection = db.collection('seller')
         server = require('../../../bin/www')
-        db = mongoose.connection
 
         token = jwt.sign({username: username}, superSecret, {
             // 1 hour
@@ -52,61 +54,71 @@ describe('Seller', () => {
     })
 
     after(async () => {
-        await db.dropDatabase
+        try {
+            await connection.close()
+            await mongod.stop()
+            await server.close()
+        } catch (err) {
+            console.log(err)
+        }
     })
 
     beforeEach(async () => {
-        await Seller.deleteMany({})
-        let seller = new Seller()
-        seller.token = token
-        seller.name = 'test1'
-        seller.description = 'Fengniao Delivery'
-        seller.deliveryTime = 40
-        seller.bulletin = 'Test 1'
-        seller.supports = [{
-            'type': 1,
-            'description': 'VC orange juice 80% discount'
-        }]
-        seller.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg'
-        seller.pics = [
-            "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
-        ]
-        seller.infos = [
-            "Invoice supported, please fill in the invoice title when ordered",
-            "Class: Other cuisine, porridge store",
-            "1340, Unit 102, Block B, bottom business, longguan real estate building, Western Huilongguan Street, Changping, Beijing",
-            "Opening hours: 10:00-20:30"
-        ]
-        await seller.save()
-        let seller1 = new Seller()
-        seller1.token = token
-        seller1.name = 'test2'
-        seller1.description = 'Meituan Delivery'
-        seller1.deliveryTime = 38
-        seller1.bulletin = 'Test 2'
-        seller1.supports = []
-        seller1.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg'
-        seller1.pics = [
-            "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
-        ]
-        seller1.infos = [
-            "Opening hours: 10:00-20:30"
-        ]
-        await seller1.save()
-        seller = await Seller.findOne({name: 'test1'})
-        setTimeout(() => {
-            validID = seller._id
-            seller.ratings = [{
-                'username': 'admin',
-                'deliveryTime': 30,
-                'score': 5,
-                'rateType': 0,
-                'text': 'Porridge is very good, I often eat this one and will often order them, strongly recommended.',
-                'avatar': 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png',
-                'recommend': ["Pumpkin Porridge"]
+        try {
+            await Seller.deleteMany({})
+            let seller = new Seller()
+            seller.token = token
+            seller.name = 'test1'
+            seller.description = 'Fengniao Delivery'
+            seller.deliveryTime = 40
+            seller.bulletin = 'Test 1'
+            seller.supports = [{
+                'type': 1,
+                'description': 'VC orange juice 80% discount'
             }]
-            seller.save()
-        }, 1000)
+            seller.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg'
+            seller.pics = [
+                "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
+            ]
+            seller.infos = [
+                "Invoice supported, please fill in the invoice title when ordered",
+                "Class: Other cuisine, porridge store",
+                "1340, Unit 102, Block B, bottom business, longguan real estate building, Western Huilongguan Street, Changping, Beijing",
+                "Opening hours: 10:00-20:30"
+            ]
+            await seller.save()
+            let seller1 = new Seller()
+            seller1.token = token
+            seller1.name = 'test2'
+            seller1.description = 'Meituan Delivery'
+            seller1.deliveryTime = 38
+            seller1.bulletin = 'Test 2'
+            seller1.supports = []
+            seller1.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg'
+            seller1.pics = [
+                "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
+            ]
+            seller1.infos = [
+                "Opening hours: 10:00-20:30"
+            ]
+            await seller1.save()
+            seller = await Seller.findOne({name: 'test1'})
+            setTimeout(() => {
+                validID = seller._id
+                seller.ratings = [{
+                    'username': 'admin',
+                    'deliveryTime': 30,
+                    'score': 5,
+                    'rateType': 0,
+                    'text': 'Porridge is very good, I often eat this one and will often order them, strongly recommended.',
+                    'avatar': 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png',
+                    'recommend': ["Pumpkin Porridge"]
+                }]
+                seller.save()
+            }, 1000)
+        } catch (err) {
+            console.log(err)
+        }
     })
 
     describe('GET /seller', () => {
