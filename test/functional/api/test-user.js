@@ -12,7 +12,7 @@ const config = require('../../../config')
 
 // mongod-memory-server
 const MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer
-const Seller = require('../../../models/seller')
+const User = require('../../../models/user')
 const {MongoClient} = require('mongodb')
 
 const _ = require('lodash')
