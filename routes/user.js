@@ -428,13 +428,14 @@ router.deleteFavorite = (req, res) => {
 router.login = (req, res) => {
     res.setHeader('Content-Type', 'application/json')
 
-    User.findOne({username: req.body.username}, (err, user) => {
+    User.find({username: req.body.username}, (err, user) => {
         if (err) {
             res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
         } else {
-            if (!user) {
+            if (user.length === 0) {
                 res.send(JSON.stringify({code: USER_NXT, message: 'The username is not registered'}, null, 5))
             } else {
+                user = user[0]
                 if (user.password !== sha1(req.body.password)) {
                     res.send(JSON.stringify({code: USER_WPW, message: 'The password is wrong'}, null, 5))
                 } else {

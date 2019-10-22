@@ -1012,7 +1012,7 @@ describe('User', () => {
                 })
             })
             describe('when the username is registered', () => {
-                it('should return a message of successfully add pay', () => {
+                it('should return a message of successfully delete pay', () => {
                     let user = {}
                     user.token = token
                     user.username = "user1"
@@ -1053,6 +1053,29 @@ describe('User', () => {
                             console.log(err)
                         })
                 })
+            })
+        })
+    })
+
+    describe('POST /login', () => {
+        describe('when the username is not registered', () => {
+            it('should return a message the username is not registered', () => {
+                let user = {}
+                user.username = "ss"
+                user.password = "123"
+                return request(server)
+                    .post('/login')
+                    .send(user)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .then((res) => {
+                        expect(res.body.code).to.equal(3)
+                        expect(res.body.message).equals("The username is not registered")
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
             })
         })
     })
