@@ -61,4 +61,59 @@ describe('Order', () => {
             console.log(err)
         }
     })
+
+    beforeEach(async () => {
+        try {
+            await Order.deleteMany({})
+            let order = new Order()
+            order.token = token
+            order.user = "user1"
+            order.seller = "seller1"
+            order.address = "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND"
+            order.phone = 353894889596
+            order.note = "Not spicy!"
+            order.foods = [
+                {
+                    "name": "Egg & Pork Congee",
+                    "price": 10,
+                    "quantity": 2
+                }
+            ]
+            await order.save()
+            let order1 = new Order()
+            order1.token = token
+            order1.user = "user2"
+            order1.seller = "seller2"
+            order1.address = "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND"
+            order1.phone = 353894889596
+            order1.note = "Not spicy!"
+            order1.foods = [
+                {
+                    "name": "Rice Cake Stir-Fried with Crabs",
+                    "price": 14,
+                    "quantity": 1
+                }
+            ]
+            await order1.save()
+            let order2 = new Order()
+            order2.token = token
+            order2.user = "user2"
+            order2.seller = "seller1"
+            order2.address = "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND"
+            order2.phone = 353894889596
+            order2.note = "Not spicy!"
+            order2.foods = [
+                {
+                    "name": "Rice Cake Stir-Fried with Crabs",
+                    "price": 14,
+                    "quantity": 1
+                }
+            ]
+            await order2.save()
+            order = await Order.findOne({user: 'user1'})
+            validID = order._id
+        } catch (err) {
+            console.log(err)
+        }
+    })
 })
