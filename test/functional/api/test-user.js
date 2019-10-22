@@ -7,6 +7,7 @@ const chai = require('chai')
 const expect = chai.expect
 const request = require('supertest')
 const jwt = require('jsonwebtoken')
+const sha1 = require('sha1')
 
 const config = require('../../../config')
 
@@ -67,7 +68,7 @@ describe('User', () => {
             await User.deleteMany({})
             let user = new User()
             user.username = "user1"
-            user.password = "123456"
+            user.password = sha1("123456")
             user.phone = 1
             user.address = ['test address']
             user.pay = ['1']
@@ -75,7 +76,7 @@ describe('User', () => {
             await user.save()
             let user1 = new User()
             user1.username = "user2"
-            user1.password = "123456"
+            user1.password = sha1("123456")
             user1.phone = 2
             user.address = ['test address']
             user.pay = ['1']
@@ -927,14 +928,16 @@ describe('User', () => {
                             .then((res) => {
                                 expect(res.body.code).to.equal(0)
                                 let result = _.map(res.body.data, (user) => {
-                                    if (user.username === 'user1') {
-                                        return {
-                                            username: user.username,
-                                            favorite: user.favorite
-                                        }
+                                    return {
+                                        username: user.username,
+                                        favorite: user.favorite
                                     }
                                 })
-                                expect(result[0].favorite.length).to.equal(2)
+                                if (result[0].username === 'user1') {
+                                    expect(result[0].favorite.length).to.equal(2)
+                                } else if (result[1].username === 'user1') {
+                                    expect(result[1].favorite.length).to.equal(2)
+                                }
                             })
                             .catch((err) => {
                                 console.log(err)
@@ -1093,6 +1096,26 @@ describe('User', () => {
                         .then((res) => {
                             expect(res.body.code).to.equal(4)
                             expect(res.body.message).equals("The password is wrong")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
+            })
+            describe('when the password is correct', () => {
+                it('should return a token and a message showing successfully login, use your token', () => {
+                    let user = {}
+                    user.username = "user1"
+                    user.password = "123456"
+                    return request(server)
+                        .post('/login')
+                        .send(user)
+                        .set("Accept", "application/json")
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(0)
+                            expect(res.body.message).equals("Successfully login, use your token")
                         })
                         .catch((err) => {
                             console.log(err)
