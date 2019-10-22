@@ -299,6 +299,27 @@ describe('Order', () => {
                         })
                 })
             })
+            describe('when the token is valid', () => {
+                describe('when the seller id is valid', () => {
+                    it('should return all orders of a seller', () => {
+                        let order = {}
+                        order.token = token
+                        return request(server)
+                            .get('/order/seller/seller1')
+                            .send(order)
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                expect(res.body.data.length).to.equal(2)
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
+                })
+            })
         })
     })
 })
