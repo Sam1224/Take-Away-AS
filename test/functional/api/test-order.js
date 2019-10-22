@@ -381,6 +381,27 @@ describe('Order', () => {
                         })
                 })
             })
+            describe('when the token is valid', () => {
+                describe('when the id is valid', () => {
+                    it('should return an order', () => {
+                        let order = {}
+                        order.token = token
+                        return request(server)
+                            .get(`/order/${validID}`)
+                            .send(order)
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                expect(res.body.data.length).to.equal(1)
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
+                })
+            })
         })
     })
 })
