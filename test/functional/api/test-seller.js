@@ -820,5 +820,44 @@ describe('Seller', () => {
                 }, 1000)
             })
         })
+        describe('when there is a jwt token', () => {
+            describe('when the token is expired', () => {
+                it('should return an expired error', () => {
+                    let rating = {}
+                    token = jwt.sign({username: username}, superSecret, {
+                        // 1 s
+                        expiresIn: 1
+                    })
+                    rating.token = token
+                    rating.username = 'admin'
+                    rating.deliveryTime = 30
+                    rating.score = 5
+                    rating.rateType = 0
+                    rating.text = 'Porridge is very good, I often eat this one and will often order them, strongly recommended.'
+                    rating.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
+                    rating.recommend = ["Pumpkin Porridge"]
+                    setTimeout(() => {
+                        return request(server)
+                            .post(`/seller/${validID}/ratings`)
+                            .send(seller)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(-1)
+                                expect(res.body.error.name).equals("TokenExpiredError")
+                            })
+                    }, 1000)
+                })
+                after(() => {
+                    setTimeout(() => {
+                        return request(server)
+                            .get(`/seller/${validID}`)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.data.ratings.length).to.equal(0)
+                            })
+                    }, 1000)
+                })
+            })
+        })
     })
 })
