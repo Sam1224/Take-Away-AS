@@ -237,6 +237,25 @@ describe('Order', () => {
                             })
                     })
                 })
+                describe('when the user id is invalid', () => {
+                    it('should return an empty array', () => {
+                        let order = {}
+                        order.token = token
+                        return request(server)
+                            .get('/order/user/a')
+                            .send(order)
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                expect(res.body.data.length).to.equal(0)
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
+                })
             })
         })
     })
