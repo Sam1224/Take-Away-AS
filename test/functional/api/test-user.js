@@ -838,7 +838,7 @@ describe('User', () => {
             it('should require to login if it does not have a jwt token',  () => {
                 let user = {}
                 user.username = "user1"
-                user.pay = '5dac7c136c707500171b0724'
+                user.favorite = '5dac7c136c707500171b0724'
                 return request(server)
                     .post('/user/favorite')
                     .send(user)
@@ -852,6 +852,29 @@ describe('User', () => {
                     .catch((err) => {
                         console.log(err)
                     })
+            })
+        })
+        describe('when there is a jwt token', () => {
+            describe('when the token is invalid', () => {
+                it('should return an invalid error', () => {
+                    let user = {}
+                    user.token = "123"
+                    user.username = "user1"
+                    user.favorite = '5dac7c136c707500171b0724'
+                    return request(server)
+                        .post('/user/favorite')
+                        .send(user)
+                        .set("Accept", "application/json")
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(-1)
+                            expect(res.body.error.name).equals("JsonWebTokenError")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
             })
         })
     })
