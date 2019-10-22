@@ -156,6 +156,25 @@ describe('Order', () => {
                         })
                 })
             })
+            describe('when the token is valid', () => {
+                it('should return all orders ', () => {
+                    let order = {}
+                    order.token = token
+                    return request(server)
+                        .get('/order')
+                        .send(order)
+                        .set("Accept", "application/json")
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(0)
+                            expect(res.body.data.length).to.equal(3)
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
+            })
         })
     })
 })
