@@ -263,18 +263,23 @@ router.addPay = (req, res) => {
             } else {
                 req.decoded = decoded
 
-                User.findOne({username: req.body.username}, (err, user) => {
+                User.find({username: req.body.username}, (err, user) => {
                     if (err) {
                         res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
                     } else {
-                        let pay = req.body.pay
-                        User.update({_id: user._id}, {$addToSet: {pay: pay}}, (err) => {
-                            if (err) {
-                                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-                            } else {
-                                res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Payment"}, null, 5))
-                            }
-                        })
+                        if (user.length === 0) {
+                            res.send(JSON.stringify({code: USER_NXT, message: 'The username is not registered'}, null, 5))
+                        } else {
+                            user = user[0]
+                            let pay = req.body.pay
+                            User.update({_id: user._id}, {$addToSet: {pay: pay}}, (err) => {
+                                if (err) {
+                                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                                } else {
+                                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Payment"}, null, 5))
+                                }
+                            })
+                        }
                     }
                 })
             }
