@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "cross-env NODE_ENV=test mocha --timeout 6000 test/functional/api/*.js --exit"
+    "test": "cross-env NODE_ENV=test mocha --timeout 6000 test/functional/api/*.js --exit",
+    "test:seller": "cross-env NODE_ENV=test mocha --timeout 6000 test/functional/api/test-seller.js --exit",
+    "test:user": "cross-env NODE_ENV=test mocha --timeout 6000 test/functional/api/test-user.js --exit"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
