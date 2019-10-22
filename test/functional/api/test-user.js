@@ -360,5 +360,20 @@ describe('User', () => {
                     })
             })
         })
+        describe('when the id is invalid', () => {
+            it('should return an error', () => {
+                return request(server)
+                    .delete(`/user/123`)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .then((res) => {
+                        expect(res.body.code).to.equal(-1)
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            })
+        })
     })
 })
