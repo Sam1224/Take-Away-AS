@@ -496,6 +496,59 @@ describe('Order', () => {
                         })
                 })
             })
+            describe('when the token is valid', () => {
+                it('should return a message of successfully add order', () => {
+                        let order = {}
+                        order.token = token
+                        order.user = "user3"
+                        order.seller = "seller3"
+                        order.address = "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND"
+                        order.phone = 353894889596
+                        order.note = "Not spicy!"
+                        order.foods = [
+                            {
+                                "name": "Egg & Pork Congee",
+                                "price": 10,
+                                "quantity": 2
+                            },
+                            {
+                                "name": "Rice Cake Stir-Fried with Crabs",
+                                "price": 14,
+                                "quantity": 1
+                            }
+                        ]
+                        return request(server)
+                            .post('/order')
+                            .send(order)
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                expect(res.body.message).equals("Successfully Add Order")
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
+                after(() => {
+                    let order = {}
+                    order.token = token
+                    return request(server)
+                        .get('/order/user/user3')
+                        .send(order)
+                        .set("Accept", "application/json")
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(0)
+                            expect(res.body.data.length).to.equal(1)
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
+            })
         })
     })
 })
