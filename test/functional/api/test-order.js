@@ -677,5 +677,34 @@ describe('Order', () => {
                     })
             })
         })
+        describe('when there is a jwt token', () => {
+            describe('when the token is invalid', () => {
+                it('should return an invalid error', () => {
+                    let order = {}
+                    order.token = "123"
+                    order.seller = "5dac7c136c707500171b0724"
+                    order.username = "admin"
+                    order.deliveryTime = 30
+                    order.score = 5
+                    order.rateType = 0
+                    order.text = "Porridge is very good, I often eat this one and will often order them, strongly recommended."
+                    order.avatar = "http://static.galileo.xiaojukeji.com/static/tms/default_header.png"
+                    order.recommend = ["Pumpkin Porridge"]
+                    return request(server)
+                        .put(`/order/${validID}`)
+                        .send(order)
+                        .set("Accept", "application/json")
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(-1)
+                            expect(res.body.error.name).equals("JsonWebTokenError")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
+            })
+        })
     })
 })
