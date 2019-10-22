@@ -1013,6 +1013,39 @@ describe('Seller', () => {
                     }, 1000)
                 })
             })
+            describe('when the token is invalid', () => {
+                it('should return an invalid error', () => {
+                    let rating = {}
+                    rating.token = '123fjdsaf'
+                    rating.username = 'admin'
+                    rating.deliveryTime = 30
+                    rating.score = 5
+                    rating.rateType = 0
+                    rating.text = 'Porridge is very good, I often eat this one and will often order them, strongly recommended.'
+                    rating.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
+                    rating.recommend = ["Pumpkin Porridge"]
+                    setTimeout(() => {
+                        return request(server)
+                            .delete(`/seller/${validID}/ratings`)
+                            .send(rating)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(-1)
+                                expect(res.body.error.name).equals("JsonWebTokenError")
+                            })
+                    }, 1000)
+                })
+                after(() => {
+                    setTimeout(() => {
+                        return request(server)
+                            .get(`/seller/${validID}`)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.data.ratings.length).to.equal(1)
+                            })
+                    }, 1000)
+                })
+            })
         })
     })
 })
