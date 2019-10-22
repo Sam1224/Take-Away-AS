@@ -266,16 +266,14 @@ router.commentOrder = (req, res) => {
                             if (err) {
                                 res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
                             } else {
-                                res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Rating"}, null, 5))
-                            }
-                        })
-
-                        order.status = 1
-                        order.save((err) => {
-                            if (err) {
-                                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-                            } else {
-                                res.send(JSON.stringify({code: ERR_OK, message: "Successfully Update Order"}, null, 5))
+                                order.status = 1
+                                order.save((err) => {
+                                    if (err) {
+                                        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                                    } else {
+                                        res.send(JSON.stringify({code: ERR_OK, message: "Successfully Update Order"}, null, 5))
+                                    }
+                                })
                             }
                         })
                     }

@@ -13,6 +13,7 @@ const config = require('../../../config')
 // mongod-memory-server
 const MongoMemoryServer = require('mongodb-memory-server').MongoMemoryServer
 const Order = require('../../../models/order')
+const Seller = require('../../../models/seller')
 const {MongoClient} = require('mongodb')
 
 const _ = require('lodash')
@@ -25,6 +26,8 @@ let url, connection, collection
 let username = "admin"
 let token
 let superSecret = config.superSecret
+
+let sellerID
 
 describe('Order', () => {
     before(async () => {
@@ -112,6 +115,40 @@ describe('Order', () => {
             await order2.save()
             order = await Order.findOne({user: 'user1'})
             validID = order._id
+
+            await Seller.deleteMany({})
+            let seller = new Seller()
+            seller.token = token
+            seller.name = 'test1'
+            seller.description = 'Fengniao Delivery'
+            seller.deliveryTime = 40
+            seller.bulletin = 'Test 1'
+            seller.supports = [{
+                'type': 1,
+                'description': 'VC orange juice 80% discount'
+            }]
+            seller.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg'
+            seller.pics = [
+                "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
+            ]
+            seller.infos = [
+                "Invoice supported, please fill in the invoice title when ordered",
+                "Class: Other cuisine, porridge store",
+                "1340, Unit 102, Block B, bottom business, longguan real estate building, Western Huilongguan Street, Changping, Beijing",
+                "Opening hours: 10:00-20:30"
+            ]
+            seller.ratings = [{
+                'username': 'admin',
+                'deliveryTime': 30,
+                'score': 5,
+                'rateType': 0,
+                'text': 'Porridge is very good, I often eat this one and will often order them, strongly recommended.',
+                'avatar': 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png',
+                'recommend': ["Pumpkin Porridge"]
+            }]
+            await seller.save()
+            seller = await Seller.findOne({name: 'test1'})
+            sellerID = seller._id
         } catch (err) {
             console.log(err)
         }
@@ -699,6 +736,47 @@ describe('Order', () => {
                         .then((res) => {
                             expect(res.body.code).to.equal(-1)
                             expect(res.body.error.name).equals("JsonWebTokenError")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
+            })
+            describe('when the token is valid', () => {
+                it('should return a message of successfully update order', () => {
+                    let order = {}
+                    order.token = token
+                    order.seller = sellerID
+                    order.username = "admin"
+                    order.deliveryTime = 30
+                    order.score = 5
+                    order.rateType = 0
+                    order.text = "Porridge is very good, I often eat this one and will often order them, strongly recommended."
+                    order.avatar = "http://static.galileo.xiaojukeji.com/static/tms/default_header.png"
+                    order.recommend = ["Pumpkin Porridge"]
+                    return request(server)
+                        .put(`/order/${validID}`)
+                        .send(order)
+                        .set("Accept", "application/json")
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(0)
+                            expect(res.body.message).equals("Successfully Update Order")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
+                after(() => {
+                    return request(server)
+                        .get(`/seller/${sellerID}`)
+                        .set("Accept", "application/json")
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(0)
+                            expect(res.body.data[0].ratings.length).to.equal(2)
                         })
                         .catch((err) => {
                             console.log(err)
