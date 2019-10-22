@@ -649,4 +649,33 @@ describe('Order', () => {
             })
         })
     })
+
+    describe('PUT /order/:id', () => {
+        describe('when there is no jwt token', () => {
+            it('should require to login if it does not have a jwt token', () => {
+                let order = {}
+                order.seller = "5dac7c136c707500171b0724"
+                order.username = "admin"
+                order.deliveryTime = 30
+                order.score = 5
+                order.rateType = 0
+                order.text = "Porridge is very good, I often eat this one and will often order them, strongly recommended."
+                order.avatar = "http://static.galileo.xiaojukeji.com/static/tms/default_header.png"
+                order.recommend = ["Pumpkin Porridge"]
+                return request(server)
+                    .put(`/order/${validID}`)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .send(order)
+                    .expect(200)
+                    .then((res) => {
+                        expect(res.body.code).to.equal(1)
+                        expect(res.body.message).equals("Not Login Yet, Please Login")
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            })
+        })
+    })
 })
