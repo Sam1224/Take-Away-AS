@@ -796,4 +796,29 @@ describe('Seller', () => {
             })
         })
     })
+
+    describe('POST /seller/:id/ratings', () => {
+        describe('when there is no jwt token', () => {
+            it('should require to login if it does not have a jwt token', () => {
+                let rating = {}
+                rating.username = 'admin'
+                rating.deliveryTime = 30
+                rating.score = 5
+                rating.rateType = 0
+                rating.text = 'Porridge is very good, I often eat this one and will often order them, strongly recommended.'
+                rating.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png'
+                rating.recommend = ["Pumpkin Porridge"]
+                setTimeout(() => {
+                    return request(server)
+                        .post(`/seller/${validID}/ratings`)
+                        .send(rating)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(1)
+                            expect(res.body.message).equals("Not Login Yet, Please Login")
+                        })
+                }, 1000)
+            })
+        })
+    })
 })
