@@ -1011,6 +1011,49 @@ describe('User', () => {
                         })
                 })
             })
+            describe('when the username is registered', () => {
+                it('should return a message of successfully add pay', () => {
+                    let user = {}
+                    user.token = token
+                    user.username = "user1"
+                    user.favorite = '1234'
+                    return request(server)
+                        .delete('/user/favorite')
+                        .send(user)
+                        .set("Accept", "application/json")
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(0)
+                            expect(res.body.message).equals("Successfully Delete Favorite")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
+                after(() => {
+                    return request(server)
+                        .get('/user')
+                        .set("Accept", "application/json")
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(0)
+                            let result = _.map(res.body.data, (user) => {
+                                if (user.username === 'user1') {
+                                    return {
+                                        username: user.username,
+                                        favorite: user.favorite
+                                    }
+                                }
+                            })
+                            expect(result[0].favorite.length).to.equal(0)
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
+            })
         })
     })
 })
