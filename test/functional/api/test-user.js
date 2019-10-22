@@ -168,5 +168,48 @@ describe('User', () => {
                     })
             })
         })
+        describe('when the username is unique', () => {
+            it('should return a message of successfully add user', () => {
+                let user = {}
+                user.username = "user3"
+                user.password = "123"
+                user.phone = 12
+                return request(server)
+                    .post("/user")
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .send(user)
+                    .expect(200)
+                    .then((res) => {
+                        expect(res.body.code).to.equal(0)
+                        expect(res.body.message).equals("Successfully Add User")
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            })
+            after(() => {
+                return request(server)
+                    .get(`/user`)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .then((res) => {
+                        expect(res.body.code).to.equal(0)
+                        expect(res.body.data.length).to.equal(3)
+                        let result = _.map(res.body.data, (user) => {
+                            return {
+                                username: user.username
+                            }
+                        })
+                        expect(result).to.deep.include({
+                            username: 'user3'
+                        })
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            })
+        })
     })
 })
