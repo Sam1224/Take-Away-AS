@@ -420,6 +420,29 @@ describe('User', () => {
                         })
                 })
             })
+            describe('when the token is valid', () => {
+                describe('when the username is not registered', () => {
+                    it('should return a message the username is not registered', () => {
+                        let user = {}
+                        user.token = token
+                        user.username = "ss"
+                        user.address = "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND"
+                        return request(server)
+                            .post('/user/address')
+                            .send(user)
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(3)
+                                expect(res.body.message).equals("The username is not registered")
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
+                })
+            })
         })
     })
 })

@@ -179,14 +179,18 @@ router.addAddress = (req, res) => {
                     if (err) {
                         res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
                     } else {
-                        let address = req.body.address
-                        User.update({_id: user._id}, {$addToSet: {address: address}}, (err) => {
-                            if (err) {
-                                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
-                            } else {
-                                res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Address"}, null, 5))
-                            }
-                        })
+                        if (!user) {
+                            res.send(JSON.stringify({code: USER_NXT, message: 'The username is not registered'}, null, 5))
+                        } else {
+                            let address = req.body.address
+                            User.update({_id: user._id}, {$addToSet: {address: address}}, (err) => {
+                                if (err) {
+                                    res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+                                } else {
+                                    res.send(JSON.stringify({code: ERR_OK, message: "Successfully Add Address"}, null, 5))
+                                }
+                            })
+                        }
                     }
                 })
             }
