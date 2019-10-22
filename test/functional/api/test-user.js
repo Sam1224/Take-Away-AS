@@ -666,6 +666,49 @@ describe('User', () => {
                             })
                     })
                 })
+                describe('when the username is registered', () => {
+                    it('should return a message of successfully add pay', () => {
+                        let user = {}
+                        user.token = token
+                        user.username = "user1"
+                        user.pay = 6228480395827429378
+                        return request(server)
+                            .post('/user/pay')
+                            .send(user)
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                expect(res.body.message).equals("Successfully Add Payment")
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
+                    after(() => {
+                        return request(server)
+                            .get('/user')
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(0)
+                                let result = _.map(res.body.data, (user) => {
+                                    if (user.username === 'user1') {
+                                        return {
+                                            username: user.username,
+                                            pay: user.pay
+                                        }
+                                    }
+                                })
+                                expect(result[0].pay.length).to.equal(1)
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
+                })
             })
         })
     })
