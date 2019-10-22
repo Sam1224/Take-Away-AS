@@ -83,4 +83,33 @@ describe('User', () => {
             console.log(err)
         }
     })
+
+    describe('GET /user', () => {
+        it('should GET all the users', () => {
+            return request(server)
+                .get("/user")
+                .set("Accept", "application/json")
+                .expect("Content-Type", /json/)
+                .expect(200)
+                .then((res) => {
+                    expect(res.body.code).to.equal(0)
+                    expect(res.body.data).to.be.a('array')
+                    expect(res.body.data.length).to.equal(2)
+                    let result = _.map(res.body.data, (user) => {
+                        return {
+                            username: user.username
+                        }
+                    })
+                    expect(result).to.deep.include({
+                        username: 'user1'
+                    })
+                    expect(result).to.deep.include({
+                        username: 'user2'
+                    })
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        })
+    })
 })
