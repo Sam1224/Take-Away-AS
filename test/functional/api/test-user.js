@@ -966,5 +966,28 @@ describe('User', () => {
                     })
             })
         })
+        describe('when there is a jwt token', () => {
+            describe('when the token is invalid', () => {
+                it('should return an invalid error', () => {
+                    let user = {}
+                    user.token = "123"
+                    user.username = "user1"
+                    user.favorite = '1234'
+                    return request(server)
+                        .delete('/user/favorite')
+                        .send(user)
+                        .set("Accept", "application/json")
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(-1)
+                            expect(res.body.error.name).equals("JsonWebTokenError")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
+            })
+        })
     })
 })
