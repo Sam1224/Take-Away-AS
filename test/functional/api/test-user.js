@@ -376,4 +376,27 @@ describe('User', () => {
             })
         })
     })
+
+    describe('POST /user/address', () => {
+        describe('when there is no jwt token', () => {
+            it('should require to login if it does not have a jwt token',  () => {
+                let user = {}
+                user.username = "test1"
+                user.address = "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND"
+                return request(server)
+                    .post(`/user/address`)
+                    .send(user)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .then((res) => {
+                        expect(res.body.code).to.equal(1)
+                        expect(res.body.message).equals("Not Login Yet, Please Login")
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            })
+        })
+    })
 })
