@@ -61,4 +61,26 @@ describe('User', () => {
             console.log(err)
         }
     })
+
+    beforeEach(async () => {
+        try {
+            await User.deleteMany({})
+            let user = new User()
+            user.username = "user1"
+            user.password = "123456"
+            user.phone = 1
+            await user.save()
+            let user1 = new User()
+            user1.username = "user2"
+            user1.password = "123456"
+            user1.phone = 2
+            await user1.save()
+            user = await User.findOne({username: 'user1'})
+            // setTimeout(() => {
+            validID = user._id
+            // }, 500)
+        } catch (err) {
+            console.log(err)
+        }
+    })
 })
