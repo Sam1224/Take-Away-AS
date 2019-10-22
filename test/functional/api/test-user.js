@@ -212,4 +212,28 @@ describe('User', () => {
             })
         })
     })
+
+    describe('PUT /user', () => {
+        describe('when there is no jwt token', () => {
+            it('should require to login if it does not have a jwt token',  () => {
+                let user = {}
+                user.username = "test1"
+                user.password = "test1"
+                user.phone = "1212"
+                return request(server)
+                    .put(`/user`)
+                    .send(user)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .then((res) => {
+                        expect(res.body.code).to.equal(1)
+                        expect(res.body.message).equals("Not Login Yet, Please Login")
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            })
+        })
+    })
 })
