@@ -600,4 +600,27 @@ describe('User', () => {
             })
         })
     })
+
+    describe('POST /user/pay', () => {
+        describe('when there is no jwt token', () => {
+            it('should require to login if it does not have a jwt token',  () => {
+                let user = {}
+                user.username = "user1"
+                user.pay = 6228480395827429378
+                return request(server)
+                    .post('/user/pay')
+                    .send(user)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .then((res) => {
+                        expect(res.body.code).to.equal(1)
+                        expect(res.body.message).equals("Not Login Yet, Please Login")
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            })
+        })
+    })
 })
