@@ -459,5 +459,43 @@ describe('Order', () => {
                     })
             })
         })
+        describe('when there is a jwt token', () => {
+            describe('when the token is invalid', () => {
+                it('should return an invalid error', () => {
+                    let order = {}
+                    order.token = "123"
+                    order.user = "user3"
+                    order.seller = "seller3"
+                    order.address = "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND"
+                    order.phone = 353894889596
+                    order.note = "Not spicy!"
+                    order.foods = [
+                        {
+                            "name": "Egg & Pork Congee",
+                            "price": 10,
+                            "quantity": 2
+                        },
+                        {
+                            "name": "Rice Cake Stir-Fried with Crabs",
+                            "price": 14,
+                            "quantity": 1
+                        }
+                    ]
+                    return request(server)
+                        .post('/order')
+                        .send(order)
+                        .set("Accept", "application/json")
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(-1)
+                            expect(res.body.error.name).equals("JsonWebTokenError")
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+                })
+            })
+        })
     })
 })
