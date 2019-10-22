@@ -756,6 +756,29 @@ describe('User', () => {
                         })
                 })
             })
+            describe('when the token is valid', () => {
+                describe('when the username is not registered', () => {
+                    it('should return a message the username is not registered', () => {
+                        let user = {}
+                        user.token = token
+                        user.username = "ss"
+                        user.pay = 6228480395827429378
+                        return request(server)
+                            .delete('/user/pay')
+                            .send(user)
+                            .set("Accept", "application/json")
+                            .expect("Content-Type", /json/)
+                            .expect(200)
+                            .then((res) => {
+                                expect(res.body.code).to.equal(3)
+                                expect(res.body.message).equals("The username is not registered")
+                            })
+                            .catch((err) => {
+                                console.log(err)
+                            })
+                    })
+                })
+            })
         })
     })
 })
