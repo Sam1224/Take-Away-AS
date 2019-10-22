@@ -150,7 +150,11 @@ router.deleteUser = (req, res) => {
         if (err) {
             res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
         } else {
-            res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete User"}, null, 5))
+            if (!user) {
+                res.send(JSON.stringify({code: USER_NXT, message: 'The username is not registered'}, null, 5))
+            } else {
+                res.send(JSON.stringify({code: ERR_OK, message: "Successfully Delete User"}, null, 5))
+            }
         }
     })
 }
