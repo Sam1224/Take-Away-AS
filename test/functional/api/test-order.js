@@ -177,4 +177,25 @@ describe('Order', () => {
             })
         })
     })
+
+    describe('GET /order/user/:id', () => {
+        describe('when there is no jwt token', () => {
+            it('should require to login if it does not have a jwt token', () => {
+                let order = {}
+                return request(server)
+                    .get('/order/user/user2')
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .send(order)
+                    .expect(200)
+                    .then((res) => {
+                        expect(res.body.code).to.equal(1)
+                        expect(res.body.message).equals("Not Login Yet, Please Login")
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            })
+        })
+    })
 })
