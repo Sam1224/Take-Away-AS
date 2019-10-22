@@ -1095,34 +1095,36 @@ describe('Seller', () => {
     })
 
     describe('POST /seller/search', () => {
-        it('should GET all the satisfying sellers', () => {
-            const keyword = {
-                "keyword": "test"
-            }
-            setTimeout(() => {
-                return request(server)
-                    .post("/seller/search")
-                    .set("Accept", "application/json")
-                    .send(keyword)
-                    .expect("Content-Type", /json/)
-                    .expect(200)
-                    .then((res) => {
-                        expect(res.body.code).to.equal(0)
-                        expect(res.body.data).to.be.a('array')
-                        expect(res.body.data.length).to.equal(2)
-                        let result = _.map(res.body.data, (seller) => {
-                            return {
-                                name: seller.name
-                            }
+        describe('when the keyword is not empty', () => {
+            it('should GET all the satisfying sellers', () => {
+                const keyword = {
+                    "keyword": "test"
+                }
+                setTimeout(() => {
+                    return request(server)
+                        .post("/seller/search")
+                        .set("Accept", "application/json")
+                        .send(keyword)
+                        .expect("Content-Type", /json/)
+                        .expect(200)
+                        .then((res) => {
+                            expect(res.body.code).to.equal(0)
+                            expect(res.body.data).to.be.a('array')
+                            expect(res.body.data.length).to.equal(2)
+                            let result = _.map(res.body.data, (seller) => {
+                                return {
+                                    name: seller.name
+                                }
+                            })
+                            expect(result).to.deep.include({
+                                name: 'test1'
+                            })
+                            expect(result).to.deep.include({
+                                name: 'test2'
+                            })
                         })
-                        expect(result).to.deep.include({
-                            name: 'test1'
-                        })
-                        expect(result).to.deep.include({
-                            name: 'test2'
-                        })
-                    })
-            }, 1000)
+                }, 1000)
+            })
         })
     })
 })
