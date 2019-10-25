@@ -59,7 +59,7 @@ describe('Order', () => {
 
   after(async () => {
     try {
-      await connection.close()
+      // await connection.close()
       await mongod.stop()
       await server.close()
     } catch (err) {

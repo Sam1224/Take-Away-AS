@@ -1,0 +1,4 @@
+file:
+  - ./test/functional/api/test-user.js
+  - ./test/functional/api/test-seller.js
+  - ./test/functional/api/test-order.js
