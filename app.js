@@ -1,9 +1,9 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var stylus = require('stylus');
+var createError = require('http-errors')
+var express = require('express')
+var path = require('path')
+var cookieParser = require('cookie-parser')
+var logger = require('morgan')
+var stylus = require('stylus')
 var mongoose = require('mongoose')
 
 var indexRouter = require('./routes/index')
@@ -11,20 +11,20 @@ var sellerRouter = require('./routes/seller')
 var userRouter = require('./routes/user')
 var orderRouter = require('./routes/order')
 
-var app = express();
+var app = express()
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(stylus.middleware(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(logger('dev'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(stylus.middleware(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/', indexRouter);
+app.use('/', indexRouter)
 
 /**
  * Self-defined routers
@@ -65,32 +65,33 @@ app.get('/order/seller/:id', orderRouter.findAllBySeller)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
-});
+  next(createError(404))
+})
 
 // error handler
+// eslint-disable-next-line no-unused-vars
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.message = err.message
+  res.locals.error = req.app.get('env') === 'development' ? err : {}
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+  res.status(err.status || 500)
+  res.render('error')
+})
 
 // Connect to MongoDB
 // const url = 'mongodb://localhost:27017/takeawayapp'
 const url = 'mongodb://sam:yyq19981212@ds137488.mlab.com:37488/heroku_62d2k1tf'
 mongoose.connect(url)
 
-var db = mongoose.connection;
+var db = mongoose.connection
 
 db.on('error', (err) => {
-  console.log('connection error', err);
+  console.log('connection error', err)
 })
 db.once('open', function () {
-  console.log('connected to database');
+  console.log('connected to database')
 })
 
-module.exports = app;
+module.exports = app

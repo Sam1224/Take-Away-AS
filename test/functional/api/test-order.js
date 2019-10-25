@@ -22,6 +22,7 @@ const _ = require('lodash')
 let server
 let mongod
 let db, validID
+// eslint-disable-next-line no-unused-vars
 let url, connection, collection
 
 // jwt parameters

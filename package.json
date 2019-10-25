@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=dev PORT=3001 node dist/bin/www",
+    "start:watch": "cross-env NODE_ENV=dev nodemon --exec babel-node bin/www",
     "test": "cross-env NODE_ENV=test mocha --timeout 6000 test/functional/api/*.js --exit",
     "test:seller": "cross-env NODE_ENV=test mocha --timeout 6000 test/functional/api/test-seller.js --exit",
     "test:user": "cross-env NODE_ENV=test mocha --timeout 6000 test/functional/api/test-user.js --exit",
@@ -12,7 +13,10 @@
     "prebuild": "npm-run-all test clean",
     "build": "npm run compile",
     "clean": "rimraf ./dist && mkdir dist",
-    "compile": "babel ./ --out-dir dist/ --ignore ./node_modules,./test --copy-files"
+    "compile": "babel ./ --out-dir dist/ --ignore ./node_modules,./test --copy-files",
+    "lint": "esw  ./test ./routes ./models/ app.js bin/www ",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:watch": "npm run lint -- --watch"
   },
   "dependencies": {
     "@babel/runtime": "^7.6.3",
@@ -38,8 +42,10 @@
     "@babel/register": "^7.0.0",
     "chai": "^4.0.2",
     "eslint": "^6.5.1",
+    "eslint-watch": "^6.0.1",
     "mocha": "^6.2.0",
     "mongodb-memory-server": "^5.2.7",
+    "nodemon": "^1.19.4",
     "npm-run-all": "^4.1.5",
     "nyc": "^14.1.1",
     "rimraf": "^3.0.0",
