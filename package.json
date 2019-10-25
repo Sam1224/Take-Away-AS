@@ -10,6 +10,7 @@
     "test:order": "cross-env NODE_ENV=test mocha --timeout 6000 test/functional/api/test-order.js --exit"
   },
   "dependencies": {
+    "@babel/runtime": "^7.6.3",
     "cookie-parser": "~1.4.4",
     "cross-env": "^6.0.3",
     "debug": "~2.6.9",
@@ -24,6 +25,12 @@
     "stylus": "0.54.5"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/node": "^7.6.3",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/register": "^7.0.0",
     "chai": "^4.0.2",
     "eslint": "^6.5.1",
     "mocha": "^6.2.0",

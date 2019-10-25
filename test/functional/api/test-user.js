@@ -21,7 +21,7 @@ const _ = require('lodash')
 let server
 let mongod
 let db, validID
-let url, connection
+let url, connection, collection
 
 // jwt parameters
 let username = 'admin'
@@ -56,7 +56,7 @@ describe('User', () => {
 
   after(async () => {
     try {
-      // await connection.close()
+      await connection.close()
       await mongod.stop()
       await server.close()
     } catch (err) {
