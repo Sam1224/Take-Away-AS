@@ -8,7 +8,9 @@
     "test:seller": "cross-env NODE_ENV=test mocha --timeout 6000 test/functional/api/test-seller.js --exit",
     "test:user": "cross-env NODE_ENV=test mocha --timeout 6000 test/functional/api/test-user.js --exit",
     "test:order": "cross-env NODE_ENV=test mocha --timeout 6000 test/functional/api/test-order.js --exit",
-    "build": "npm-run-all test clean compile start",
+    "postbuild": "npm start",
+    "prebuild": "npm-run-all test clean",
+    "build": "npm run compile",
     "clean": "rimraf ./dist && mkdir dist",
     "compile": "babel ./ --out-dir dist/ --ignore ./node_modules,./test --copy-files"
   },
