@@ -6,3 +6,4 @@
 *.log
 /coverage
 /.nyc_output
+/test/database

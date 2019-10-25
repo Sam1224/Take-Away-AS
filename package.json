@@ -14,7 +14,6 @@
     "cross-env": "^6.0.3",
     "debug": "~2.6.9",
     "ejs": "~2.6.1",
-    "eslint": "^6.5.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
@@ -25,9 +24,10 @@
     "stylus": "0.54.5"
   },
   "devDependencies": {
-    "mongodb-memory-server": "^5.2.7",
     "chai": "^4.0.2",
+    "eslint": "^6.5.1",
     "mocha": "^6.2.0",
+    "mongodb-memory-server": "^5.2.7",
     "supertest": "^4.0.2"
   }
 }
