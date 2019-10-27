@@ -61,7 +61,9 @@ npm run test:report
 ## Brief Description of Functionality
 This project is a backend of a take-away app, it could do some basic `CRUD` operations.
 
-It could be roughly divided into 3 parts: `user`, `seller` and `order`, there are `28` RESTful apis in total, with `8 GET`, `9 POST`, `4 PUT` and `7 DELETE`. They are listed as follow:
+It uses `jsonwebtoken` as a way of authentication, each api that needs authentication should put a token in the request body to be verified.
+
+It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corresponded models), there are `28` RESTful apis in total, with `8 GET`, `9 POST`, `4 PUT` and `7 DELETE`. They are listed as follow:
 - `user` (./routes/user.js)
     - GET       -   findAll
         - Return a list of all users.
@@ -295,6 +297,8 @@ It could be roughly divided into 3 parts: `user`, `seller` and `order`, there ar
 The whole project is deployed to [Heroku](https://www.heroku.com).
 - MongoDB:
 The MongoDB is deployed by using `mLab MongoDB sandbox` provided by [Heroku](https://www.heroku.com).
+- Authentication:
+The project uses `jsonwebtoken` as a way of authentication, each api that needs authentication should put a token in the request body to be verified.
 
 ## Git Approach
 - This project adopts `Git bash` locally, while using `Github` as the remote repository for management.
