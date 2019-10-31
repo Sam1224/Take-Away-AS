@@ -311,7 +311,7 @@ router.getTopFood = (req, res) => {
         let seller = req.params.seller
         let num = req.params.num && req.params.num !== '0' ? Number(req.params.num) : 3
         let query
-        if (seller) {
+        if (seller.trim() !== '') {
           query = {user: user, seller: seller}
         } else {
           query = {user: user}
