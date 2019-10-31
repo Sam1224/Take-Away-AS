@@ -39,7 +39,7 @@ app.put('/seller/:id/goods', sellerRouter.updateGoods)
 app.post('/seller/:id/ratings', sellerRouter.addRating)
 app.delete('/seller/:id/ratings', sellerRouter.deleteRating)
 app.post('/seller/search', sellerRouter.fuzzySearch)
-app.get('/seller/sellcount/:num', sellerRouter.getTopSellersBySellCount)
+app.get('/seller/sellcount/:num/:seq', sellerRouter.getTopSellersBySellCount)
 app.get('/seller/rankrate/:num', sellerRouter.getTopSellersByRankRate)
 
 // User
