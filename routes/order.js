@@ -21,6 +21,7 @@ const USER_DUP = 2
 const USER_NXT = 3
 // eslint-disable-next-line no-unused-vars
 const USER_WPW = 4
+const ORDER_NONE = 5
 
 /**
  * GET
@@ -279,6 +280,78 @@ router.commentOrder = (req, res) => {
                 })
               }
             })
+          }
+        })
+      }
+    })
+  }
+}
+
+/**
+ * GET
+ * getTopFood - get a user's n top food from one/all seller(s)
+ * @param req
+ * @param res
+ */
+router.getTopFood = (req, res) => {
+  res.setHeader('Content-Type', 'application/json')
+
+  // jwt
+  let token = req.body.token
+  if (!token) {
+    res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
+  } else {
+    jwt.verify(token, superSecret, (err, decoded) => {
+      if (err) {
+        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+      } else {
+        req.decoded = decoded
+
+        let user = req.params.user
+        let seller = req.params.seller
+        let num = req.params.num && req.params.num !== '0' ? Number(req.params.num) : 3
+        let query
+        if (seller) {
+          query = {user: user, seller: seller}
+        } else {
+          query = {user: user}
+        }
+        Order.find(query, (err, orders) => {
+          if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+          } else {
+            if (orders.length === 0) {
+              res.send(JSON.stringify({code: ORDER_NONE, message: 'There are no related orders'}, null, 5))
+            } else {
+              let foodMap = {}
+              orders.forEach((order) => {
+                let foods = order.foods
+                foods.forEach((food) => {
+                  let name = food.name
+                  if (foodMap.hasOwnProperty(name)) {
+                    foodMap[name] ++
+                  } else {
+                    foodMap[name] = 1
+                  }
+                })
+              })
+              // sort
+              const keys = Object.keys(foodMap)
+              keys.sort((a, b) => {
+                return foodMap[b] - foodMap[a]
+              })
+              let length = keys.length
+              let ret = []
+              keys.forEach((key) => {
+                let obj = {}
+                obj[key] = foodMap[key]
+                ret.push(obj)
+              })
+              if (num < length) {
+                ret = ret.slice(0, num)
+              }
+              res.send(JSON.stringify({code: ERR_OK, data: ret}, null, 5))
+            }
           }
         })
       }

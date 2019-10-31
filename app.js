@@ -64,6 +64,7 @@ app.delete('/order/:id', orderRouter.deleteOrder)
 app.put('/order/:id', orderRouter.commentOrder)
 app.get('/order/user/:id', orderRouter.findAllByUser)
 app.get('/order/seller/:id', orderRouter.findAllBySeller)
+app.get('/order/topfood/:user/:seller/:num', orderRouter.getTopFood)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
