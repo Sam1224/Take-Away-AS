@@ -396,4 +396,44 @@ router.fuzzySearch = (req, res) => {
   })
 }
 
+/**
+ * GET
+ * getTopSellersBySellCount - get top n sellers whose sell counts are the highest, n is 3 by default.
+ * @param req
+ * @param res
+ */
+router.getTopSellersBySellCount = (req, res) => {
+  res.setHeader('Content-Type', 'application/json')
+
+  let num = req.params.num && req.params.num !== '0' ? Number(req.params.num) : 3
+  let seq = req.params.seq === '1' ? 1 : -1
+  Seller.find({}).sort({'sellCount': seq}).limit(num).exec((err, sellers) => {
+    if (err) {
+      res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+    } else {
+      res.send(JSON.stringify({code: ERR_OK, num: sellers.length, data: sellers}, null, 5))
+    }
+  })
+}
+
+/**
+ * GET
+ * getTopSellersByRankRate - get top n sellers whose rank rates are the highest, n is 3 by default.
+ * @param req
+ * @param res
+ */
+router.getTopSellersByRankRate = (req, res) => {
+  res.setHeader('Content-Type', 'application/json')
+
+  let num = req.params.num && req.params.num !== '0' ? Number(req.params.num) : 3
+  let seq = req.params.seq === '1' ? 1 : -1
+  Seller.find({}).sort({'rankRate': seq}).limit(num).exec((err, sellers) => {
+    if (err) {
+      res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+    } else {
+      res.send(JSON.stringify({code: ERR_OK, num: sellers.length, data: sellers}, null, 5))
+    }
+  })
+}
+
 module.exports = router
