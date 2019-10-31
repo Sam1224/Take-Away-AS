@@ -426,7 +426,8 @@ router.getTopSellersByRankRate = (req, res) => {
   res.setHeader('Content-Type', 'application/json')
 
   let num = req.params.num && req.params.num !== '0' ? Number(req.params.num) : 3
-  Seller.find({}).sort({'rankRate': -1}).limit(num).exec((err, sellers) => {
+  let seq = req.params.seq === '1' ? 1 : -1
+  Seller.find({}).sort({'rankRate': seq}).limit(num).exec((err, sellers) => {
     if (err) {
       res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
     } else {
