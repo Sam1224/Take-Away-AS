@@ -869,5 +869,21 @@ describe('Order', () => {
         console.log(err)
       }
     })
+    describe('when there is no jwt token', () => {
+      it('should require to login if it does not have a jwt token', () => {
+        return request(server)
+            .get('/order/topfood/user1/seller1/3')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then((res) => {
+              expect(res.body.code).to.equal(1)
+              expect(res.body.message).equals('Not Login Yet, Please Login')
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+      })
+    })
   })
 })
