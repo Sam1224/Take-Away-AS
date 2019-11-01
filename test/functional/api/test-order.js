@@ -1031,6 +1031,37 @@ describe('Order', () => {
                       })
                 })
               })
+              describe('when the num is larger than the total num of types of foods ordered', () => {
+                it('should return all the foods ordered and the order times', () => {
+                  let order = {}
+                  order.token = token
+                  return request(server)
+                      .get('/order/topfood/user1/seller1/10')
+                      .send(order)
+                      .set('Accept', 'application/json')
+                      .expect('Content-Type', /json/)
+                      .expect(200)
+                      .then((res) => {
+                        expect(res.body.code).to.equal(0)
+                        expect(res.body.data.length).to.equal(4)
+                        expect(res.body.data).to.deep.include({
+                          "Egg & Pork Congee": 7
+                        })
+                        expect(res.body.data).to.deep.include({
+                          "Rice Cake Stir-Fried with Crabs": 3
+                        })
+                        expect(res.body.data).to.deep.include({
+                          "Beef Pie": 2
+                        })
+                        expect(res.body.data).to.deep.include({
+                          "Egg": 1
+                        })
+                      })
+                      .catch((err) => {
+                        console.log(err)
+                      })
+                })
+              })
             })
           })
         })
