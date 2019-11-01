@@ -2158,7 +2158,7 @@ describe('Seller', () => {
         })
       })
       describe('when seq is 1', () => {
-        it('should return a list ascending by sellCount', () => {
+        it('should return a list ascending by rankRate', () => {
           return request(server)
               .get('/seller/rankrate/3/1')
               .set('Accept', 'application/json')
@@ -2176,6 +2176,33 @@ describe('Seller', () => {
                 expect(seller1.rankRate).to.equal(79.9)
                 expect(seller2.name).equals('Test1')
                 expect(seller2.rankRate).to.equal(80)
+                expect(seller3.name).equals('Test2')
+                expect(seller3.rankRate).to.equal(95)
+              })
+              .catch((err) => {
+                console.log(err)
+              })
+        })
+      })
+      describe('when seq is either -1 or 1', () => {
+        it('should return a list descending by rankRate', () => {
+          return request(server)
+              .get('/seller/rankrate/3/0')
+              .set('Accept', 'application/json')
+              .expect('Content-Type', /json/)
+              .expect(200)
+              .then((res) => {
+                expect(res.body.code).to.equal(0)
+                expect(res.body.data).to.be.a('array')
+                expect(res.body.data.length).to.equal(3)
+                expect(res.body.num).to.equal(3)
+                let seller1 = _.nth(res.body.data, 0)
+                let seller2 = _.nth(res.body.data, 1)
+                let seller3 = _.nth(res.body.data, 2)
+                expect(seller1.name).equals('Test4')
+                expect(seller1.rankRate).to.equal(100)
+                expect(seller2.name).equals('Test5')
+                expect(seller2.rankRate).to.equal(96)
                 expect(seller3.name).equals('Test2')
                 expect(seller3.rankRate).to.equal(95)
               })
