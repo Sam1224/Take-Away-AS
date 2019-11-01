@@ -1355,4 +1355,53 @@ describe('Seller', () => {
       })
     })
   })
+
+  describe('GET /seller/sellcount/:num/:seq', function () {
+    this.timeout(20000)
+    beforeEach(async() => {
+      try {
+        // reset the db
+        await Seller.deleteMany({})
+
+        let rankRates = [80, 95, 79.9, 100, 96]
+        let sellCounts = [12, 7, 24, 3, 55]
+        for (let i = 0; i < 5; i++) {
+          let seller = new Seller()
+          seller.token = token
+          seller.name = `Test${i + 1}`
+          seller.description = 'Fengniao Delivery'
+          seller.deliveryTime = 40
+          seller.bulletin = `Test ${i + 1}`
+          seller.rankRate = rankRates[i]
+          seller.sellCount = sellCounts[i]
+          seller.supports = [{
+            'type': 1,
+            'description': 'VC orange juice 80% discount'
+          }]
+          seller.avatar = 'http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg'
+          seller.pics = [
+            'http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180'
+          ]
+          seller.infos = [
+            'Invoice supported, please fill in the invoice title when ordered',
+            'Class: Other cuisine, porridge store',
+            '1340, Unit 102, Block B, bottom business, longguan real estate building, Western Huilongguan Street, Changping, Beijing',
+            'Opening hours: 10:00-20:30'
+          ]
+          seller.ratings = [{
+            'username': 'admin',
+            'deliveryTime': 30,
+            'score': 5,
+            'rateType': 0,
+            'text': 'Porridge is very good, I often eat this one and will often order them, strongly recommended.',
+            'avatar': 'http://static.galileo.xiaojukeji.com/static/tms/default_header.png',
+            'recommend': ['Pumpkin Porridge']
+          }]
+          await seller.save()
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    })
+  })
 })
