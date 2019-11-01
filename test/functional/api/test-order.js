@@ -885,5 +885,26 @@ describe('Order', () => {
             })
       })
     })
+    describe('when there is a jwt token', () => {
+      describe('when the token is invalid', () => {
+        it('should return an invalid error', () => {
+          let order = {}
+          order.token = '123'
+          return request(server)
+              .get('/order/topfood/user1/seller1/3')
+              .send(order)
+              .set('Accept', 'application/json')
+              .expect('Content-Type', /json/)
+              .expect(200)
+              .then((res) => {
+                expect(res.body.code).to.equal(-1)
+                expect(res.body.error.name).equals('JsonWebTokenError')
+              })
+              .catch((err) => {
+                console.log(err)
+              })
+        })
+      })
+    })
   })
 })
