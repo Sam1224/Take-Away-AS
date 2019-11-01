@@ -945,6 +945,36 @@ describe('Order', () => {
                   })
             })
           })
+          describe('when the seller id is valid', () => {
+            describe('when the num is a valid integer', () => {
+              it('should return return an array of the top n foods with the most buying times', () => {
+                let order = {}
+                order.token = token
+                return request(server)
+                    .get('/order/topfood/user1/seller1/3')
+                    .send(order)
+                    .set('Accept', 'application/json')
+                    .expect('Content-Type', /json/)
+                    .expect(200)
+                    .then((res) => {
+                      expect(res.body.code).to.equal(0)
+                      expect(res.body.data.length).to.equal(3)
+                      expect(res.body.data).to.deep.include({
+                        "Egg & Pork Congee": 7
+                      })
+                      expect(res.body.data).to.deep.include({
+                        "Rice Cake Stir-Fried with Crabs": 3
+                      })
+                      expect(res.body.data).to.deep.include({
+                        "Beef Pie": 2
+                      })
+                    })
+                    .catch((err) => {
+                      console.log(err)
+                    })
+              })
+            })
+          })
         })
       })
     })
