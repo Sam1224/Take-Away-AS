@@ -8,6 +8,7 @@ const chai = require('chai')
 const expect = chai.expect
 const request = require('supertest')
 const jwt = require('jsonwebtoken')
+const nock = require('nock')
 
 const config = require('../../../config')
 
@@ -1399,6 +1400,250 @@ describe('Seller', () => {
           }]
           await seller.save()
         }
+
+        let response = {
+          "code": 0,
+          "data": [
+            {
+              "deliveryTime": 40,
+              "score": 0,
+              "serviceScore": 0,
+              "foodScore": 0,
+              "rankRate": 96,
+              "minPrice": 0,
+              "deliveryPrice": 0,
+              "ratingCount": 0,
+              "sellCount": 55,
+              "pics": [
+                "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
+              ],
+              "infos": [
+                "Invoice supported, please fill in the invoice title when ordered",
+                "Class: Other cuisine, porridge store",
+                "1340, Unit 102, Block B, bottom business, longguan real estate building, Western Huilongguan Street, Changping, Beijing",
+                "Opening hours: 10:00-20:30"
+              ],
+              "_id": "5dbc2c844ac07d3ab456125c",
+              "supports": [
+                {
+                  "_id": "5dbc2c844ac07d3ab456125d",
+                  "description": "VC orange juice 80% discount"
+                }
+              ],
+              "ratings": [
+                {
+                  "recommend": [
+                    "Pumpkin Porridge"
+                  ],
+                  "_id": "5dbc2c844ac07d3ab456125e",
+                  "username": "admin",
+                  "deliveryTime": 30,
+                  "score": 5,
+                  "rateType": 0,
+                  "text": "Porridge is very good, I often eat this one and will often order them, strongly recommended.",
+                  "avatar": "http://static.galileo.xiaojukeji.com/static/tms/default_header.png"
+                }
+              ],
+              "goods": [],
+              "name": "Test5",
+              "description": "Fengniao Delivery",
+              "bulletin": "Test 5",
+              "avatar": "http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg",
+              "__v": 0
+            },
+            {
+              "deliveryTime": 40,
+              "score": 0,
+              "serviceScore": 0,
+              "foodScore": 0,
+              "rankRate": 80,
+              "minPrice": 0,
+              "deliveryPrice": 0,
+              "ratingCount": 0,
+              "sellCount": 12,
+              "pics": [
+                "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
+              ],
+              "infos": [
+                "Invoice supported, please fill in the invoice title when ordered",
+                "Class: Other cuisine, porridge store",
+                "1340, Unit 102, Block B, bottom business, longguan real estate building, Western Huilongguan Street, Changping, Beijing",
+                "Opening hours: 10:00-20:30"
+              ],
+              "_id": "5dbc2c834ac07d3ab4561250",
+              "supports": [
+                {
+                  "_id": "5dbc2c834ac07d3ab4561251",
+                  "description": "VC orange juice 80% discount"
+                }
+              ],
+              "ratings": [
+                {
+                  "recommend": [
+                    "Pumpkin Porridge"
+                  ],
+                  "_id": "5dbc2c834ac07d3ab4561252",
+                  "username": "admin",
+                  "deliveryTime": 30,
+                  "score": 5,
+                  "rateType": 0,
+                  "text": "Porridge is very good, I often eat this one and will often order them, strongly recommended.",
+                  "avatar": "http://static.galileo.xiaojukeji.com/static/tms/default_header.png"
+                }
+              ],
+              "goods": [],
+              "name": "Test1",
+              "description": "Fengniao Delivery",
+              "bulletin": "Test 1",
+              "avatar": "http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg",
+              "__v": 0
+            },
+            {
+              "deliveryTime": 40,
+              "score": 0,
+              "serviceScore": 0,
+              "foodScore": 0,
+              "rankRate": 95,
+              "minPrice": 0,
+              "deliveryPrice": 0,
+              "ratingCount": 0,
+              "sellCount": 7,
+              "pics": [
+                "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
+              ],
+              "infos": [
+                "Invoice supported, please fill in the invoice title when ordered",
+                "Class: Other cuisine, porridge store",
+                "1340, Unit 102, Block B, bottom business, longguan real estate building, Western Huilongguan Street, Changping, Beijing",
+                "Opening hours: 10:00-20:30"
+              ],
+              "_id": "5dbc2c844ac07d3ab4561253",
+              "supports": [
+                {
+                  "_id": "5dbc2c844ac07d3ab4561254",
+                  "description": "VC orange juice 80% discount"
+                }
+              ],
+              "ratings": [
+                {
+                  "recommend": [
+                    "Pumpkin Porridge"
+                  ],
+                  "_id": "5dbc2c844ac07d3ab4561255",
+                  "username": "admin",
+                  "deliveryTime": 30,
+                  "score": 5,
+                  "rateType": 0,
+                  "text": "Porridge is very good, I often eat this one and will often order them, strongly recommended.",
+                  "avatar": "http://static.galileo.xiaojukeji.com/static/tms/default_header.png"
+                }
+              ],
+              "goods": [],
+              "name": "Test2",
+              "description": "Fengniao Delivery",
+              "bulletin": "Test 2",
+              "avatar": "http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg",
+              "__v": 0
+            },
+            {
+              "deliveryTime": 40,
+              "score": 0,
+              "serviceScore": 0,
+              "foodScore": 0,
+              "rankRate": 79.9,
+              "minPrice": 0,
+              "deliveryPrice": 0,
+              "ratingCount": 0,
+              "sellCount": 24,
+              "pics": [
+                "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
+              ],
+              "infos": [
+                "Invoice supported, please fill in the invoice title when ordered",
+                "Class: Other cuisine, porridge store",
+                "1340, Unit 102, Block B, bottom business, longguan real estate building, Western Huilongguan Street, Changping, Beijing",
+                "Opening hours: 10:00-20:30"
+              ],
+              "_id": "5dbc2c844ac07d3ab4561256",
+              "supports": [
+                {
+                  "_id": "5dbc2c844ac07d3ab4561257",
+                  "description": "VC orange juice 80% discount"
+                }
+              ],
+              "ratings": [
+                {
+                  "recommend": [
+                    "Pumpkin Porridge"
+                  ],
+                  "_id": "5dbc2c844ac07d3ab4561258",
+                  "username": "admin",
+                  "deliveryTime": 30,
+                  "score": 5,
+                  "rateType": 0,
+                  "text": "Porridge is very good, I often eat this one and will often order them, strongly recommended.",
+                  "avatar": "http://static.galileo.xiaojukeji.com/static/tms/default_header.png"
+                }
+              ],
+              "goods": [],
+              "name": "Test3",
+              "description": "Fengniao Delivery",
+              "bulletin": "Test 3",
+              "avatar": "http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg",
+              "__v": 0
+            },
+            {
+              "deliveryTime": 40,
+              "score": 0,
+              "serviceScore": 0,
+              "foodScore": 0,
+              "rankRate": 100,
+              "minPrice": 0,
+              "deliveryPrice": 0,
+              "ratingCount": 0,
+              "sellCount": 3,
+              "pics": [
+                "http://fuss10.elemecdn.com/8/71/c5cf5715740998d5040dda6e66abfjpeg.jpeg?imageView2/1/w/180/h/180"
+              ],
+              "infos": [
+                "Invoice supported, please fill in the invoice title when ordered",
+                "Class: Other cuisine, porridge store",
+                "1340, Unit 102, Block B, bottom business, longguan real estate building, Western Huilongguan Street, Changping, Beijing",
+                "Opening hours: 10:00-20:30"
+              ],
+              "_id": "5dbc2c844ac07d3ab4561259",
+              "supports": [
+                {
+                  "_id": "5dbc2c844ac07d3ab456125a",
+                  "description": "VC orange juice 80% discount"
+                }
+              ],
+              "ratings": [
+                {
+                  "recommend": [
+                    "Pumpkin Porridge"
+                  ],
+                  "_id": "5dbc2c844ac07d3ab456125b",
+                  "username": "admin",
+                  "deliveryTime": 30,
+                  "score": 5,
+                  "rateType": 0,
+                  "text": "Porridge is very good, I often eat this one and will often order them, strongly recommended.",
+                  "avatar": "http://static.galileo.xiaojukeji.com/static/tms/default_header.png"
+                }
+              ],
+              "goods": [],
+              "name": "Test4",
+              "description": "Fengniao Delivery",
+              "bulletin": "Test 4",
+              "avatar": "http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg",
+              "__v": 0
+            }
+          ]
+        }
+        nock('https://takeawayapp-sam.herokuapp.com')
+            .get('/seller')
+            .reply(200, response)
       } catch (err) {
         console.log(err)
       }
