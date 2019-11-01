@@ -8,6 +8,7 @@ const chai = require('chai')
 const expect = chai.expect
 const request = require('supertest')
 const jwt = require('jsonwebtoken')
+const nock = require('nock')
 
 const config = require('../../../config')
 
@@ -786,6 +787,87 @@ describe('Order', () => {
             })
         })
       })
+    })
+  })
+
+  describe('GET /order/topfood/:user/:seller/:num', function () {
+    this.timeout(20000)
+    beforeEach(async () => {
+      try {
+        // reset the db
+        await Order.deleteMany({})
+
+        for (let i = 0; i < 7; i++) {
+          let order = new Order()
+          order.token = token
+          order.user = 'user1'
+          order.seller = 'seller1'
+          order.address = 'APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND'
+          order.phone = 353894889596
+          order.note = 'Not spicy!'
+          order.foods = [
+            {
+              'name': 'Egg & Pork Congee',
+              'price': 10,
+              'quantity': 2
+            }
+          ]
+          await order.save()
+        }
+        for (let i = 0; i < 3; i++) {
+          let order = new Order()
+          order.token = token
+          order.user = 'user1'
+          order.seller = 'seller1'
+          order.address = 'APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND'
+          order.phone = 353894889596
+          order.note = 'Not spicy!'
+          order.foods = [
+            {
+              'name': 'Rice Cake Stir-Fried with Crabs',
+              'price': 14,
+              'quantity': 1
+            }
+          ]
+          await order.save()
+        }
+        for (let i = 0; i < 1; i++) {
+          let order = new Order()
+          order.token = token
+          order.user = 'user1'
+          order.seller = 'seller1'
+          order.address = 'APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND'
+          order.phone = 353894889596
+          order.note = 'Not spicy!'
+          order.foods = [
+            {
+              'name': 'Egg',
+              'price': 2,
+              'quantity': 5
+            }
+          ]
+          await order.save()
+        }
+        for (let i = 0; i < 2; i++) {
+          let order = new Order()
+          order.token = token
+          order.user = 'user1'
+          order.seller = 'seller1'
+          order.address = 'APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND'
+          order.phone = 353894889596
+          order.note = 'Not spicy!'
+          order.foods = [
+            {
+              'name': 'Beef Pie',
+              'price': 15,
+              'quantity': 2
+            }
+          ]
+          await order.save()
+        }
+      } catch (err) {
+        console.log(err)
+      }
     })
   })
 })
