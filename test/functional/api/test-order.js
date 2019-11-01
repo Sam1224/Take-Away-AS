@@ -905,6 +905,27 @@ describe('Order', () => {
               })
         })
       })
+      describe('when the token is valid', () => {
+        describe('when the user id is invalid', () => {
+          it('should return a message there are no related orders', () => {
+            let order = {}
+            order.token = token
+            return request(server)
+                .get('/order/topfood/u/seller1/3')
+                .send(order)
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(200)
+                .then((res) => {
+                  expect(res.body.code).to.equal(5)
+                  expect(res.body.message).equals('There are no related orders')
+                })
+                .catch((err) => {
+                  console.log(err)
+                })
+          })
+        })
+      })
     })
   })
 })
