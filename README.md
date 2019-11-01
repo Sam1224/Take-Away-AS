@@ -63,7 +63,7 @@ This project is a backend of a take-away app, it could do some basic `CRUD` oper
 
 It uses `jsonwebtoken` as a way of authentication, each api that needs authentication should put a token in the request body to be verified.
 
-It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corresponded models), there are `28` RESTful apis in total, with `8 GET`, `9 POST`, `4 PUT` and `7 DELETE`. They are listed as follow:
+It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corresponded models), there are `31` RESTful apis in total, with `11 GET`, `9 POST`, `4 PUT` and `7 DELETE`. They are listed as follow:
 - `user` (./routes/user.js)
     - GET       -   findAll
         - Return a list of all users.
@@ -227,6 +227,14 @@ It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corres
         - No need for jwt authentication.
         - `localhost:3000/seller/search`
             - `keyword`: 'xxx'
+    - GET       -   getTopSellersBySellCount
+        - Get the top n sellers whose sell counts are the highest.
+        - No need for jwt authentication.
+        - `localhost:3000/seller/sellcount/:num/:seq`
+    - GET       -   getTopSellersByRankRate
+        - Get the top n sellers whose rank rates are the highest.
+        - No need for jwt authentication.
+        - `localhost:3000/seller/rankrate/:num/:seq`
 - `order` (./routes/order.js)
     - GET       -   findAll
         - Return a list of all orders.
@@ -291,6 +299,11 @@ It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corres
             - `avatar`: 'url'
             - `recommend`: ['xxx', ...]
             - `token`: 'xxx'
+    - GET       -   getTopFood
+        - Get a user's top n foods from one/all seller(s).
+        - Need jwt authentication.
+        - `localhost:3000/topfood/:user/:seller/:num`
+            - `token`: 'xxx'
 
 ## Persistence Approach
 - App:
@@ -312,7 +325,8 @@ git clone https://github.com/Sam1224/Take-Away-AS.git
 ## DX (Developer eXperience) Approach
 - Automated testing:
     - Using `mocha` and `lodash` to do automated testing.
-    - There are `86` test cases in total.
+    - There are `108` test cases in total.
+    - Using `nock` to mock http request.
 - Code quality:
     - Using `eslint` to check and obey the `code standard`.
     - Using `nyc` to generate `code coverage report`.
@@ -345,4 +359,5 @@ git clone https://github.com/Sam1224/Take-Away-AS.git
 - [nyc](https://github.com/istanbuljs/nyc)
 - [Postman](https://www.getpostman.com/)
 - [TOC generator](https://ecotrust-canada.github.io/markdown-toc/)
+- [nock](https://github.com/nock/nock)
 
