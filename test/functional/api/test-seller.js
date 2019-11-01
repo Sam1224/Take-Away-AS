@@ -1403,5 +1403,34 @@ describe('Seller', () => {
         console.log(err)
       }
     })
+    describe('when num is a valid integer', () => {
+      describe('when seq is -1', () => {
+        it('should return a list descending by sellCount', () => {
+          return request(server)
+              .get('/seller/sellcount/3/-1')
+              .set('Accept', 'application/json')
+              .expect('Content-Type', /json/)
+              .expect(200)
+              .then((res) => {
+                expect(res.body.code).to.equal(0)
+                expect(res.body.data).to.be.a('array')
+                expect(res.body.data.length).to.equal(3)
+                expect(res.body.num).to.equal(3)
+                let seller1 = _.nth(res.body.data, 0)
+                let seller2 = _.nth(res.body.data, 1)
+                let seller3 = _.nth(res.body.data, 2)
+                expect(seller1.name).equals('Test5')
+                expect(seller1.sellCount).to.equal(55)
+                expect(seller2.name).equals('Test3')
+                expect(seller2.sellCount).to.equal(24)
+                expect(seller3.name).equals('Test1')
+                expect(seller3.sellCount).to.equal(12)
+              })
+              .catch((err) => {
+                console.log(err)
+              })
+        })
+      })
+    })
   })
 })
