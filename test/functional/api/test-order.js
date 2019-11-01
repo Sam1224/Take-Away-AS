@@ -865,6 +865,251 @@ describe('Order', () => {
           ]
           await order.save()
         }
+
+        let response = {
+          "code": 0,
+          "data": [
+            {
+              "note": "Not spicy!",
+              "status": 0,
+              "_id": "5dbc53e417e1a64a94fcf548",
+              "foods": [
+                {
+                  "_id": "5dbc53e417e1a64a94fcf549",
+                  "name": "Egg & Pork Congee",
+                  "price": 10,
+                  "quantity": 2
+                }
+              ],
+              "user": "user1",
+              "seller": "seller1",
+              "address": "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND",
+              "phone": 353894889596,
+              "__v": 0
+            },
+            {
+              "note": "Not spicy!",
+              "status": 0,
+              "_id": "5dbc53e417e1a64a94fcf54a",
+              "foods": [
+                {
+                  "_id": "5dbc53e417e1a64a94fcf54b",
+                  "name": "Egg & Pork Congee",
+                  "price": 10,
+                  "quantity": 2
+                }
+              ],
+              "user": "user1",
+              "seller": "seller1",
+              "address": "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND",
+              "phone": 353894889596,
+              "__v": 0
+            },
+            {
+              "note": "Not spicy!",
+              "status": 0,
+              "_id": "5dbc53e517e1a64a94fcf54c",
+              "foods": [
+                {
+                  "_id": "5dbc53e517e1a64a94fcf54d",
+                  "name": "Egg & Pork Congee",
+                  "price": 10,
+                  "quantity": 2
+                }
+              ],
+              "user": "user1",
+              "seller": "seller1",
+              "address": "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND",
+              "phone": 353894889596,
+              "__v": 0
+            },
+            {
+              "note": "Not spicy!",
+              "status": 0,
+              "_id": "5dbc53e517e1a64a94fcf54e",
+              "foods": [
+                {
+                  "_id": "5dbc53e517e1a64a94fcf54f",
+                  "name": "Egg & Pork Congee",
+                  "price": 10,
+                  "quantity": 2
+                }
+              ],
+              "user": "user1",
+              "seller": "seller1",
+              "address": "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND",
+              "phone": 353894889596,
+              "__v": 0
+            },
+            {
+              "note": "Not spicy!",
+              "status": 0,
+              "_id": "5dbc53e517e1a64a94fcf550",
+              "foods": [
+                {
+                  "_id": "5dbc53e517e1a64a94fcf551",
+                  "name": "Egg & Pork Congee",
+                  "price": 10,
+                  "quantity": 2
+                }
+              ],
+              "user": "user1",
+              "seller": "seller1",
+              "address": "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND",
+              "phone": 353894889596,
+              "__v": 0
+            },
+            {
+              "note": "Not spicy!",
+              "status": 0,
+              "_id": "5dbc53e517e1a64a94fcf552",
+              "foods": [
+                {
+                  "_id": "5dbc53e517e1a64a94fcf553",
+                  "name": "Egg & Pork Congee",
+                  "price": 10,
+                  "quantity": 2
+                }
+              ],
+              "user": "user1",
+              "seller": "seller1",
+              "address": "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND",
+              "phone": 353894889596,
+              "__v": 0
+            },
+            {
+              "note": "Not spicy!",
+              "status": 0,
+              "_id": "5dbc53e517e1a64a94fcf554",
+              "foods": [
+                {
+                  "_id": "5dbc53e517e1a64a94fcf555",
+                  "name": "Rice Cake Stir-Fried with Crabs",
+                  "price": 14,
+                  "quantity": 1
+                }
+              ],
+              "user": "user1",
+              "seller": "seller1",
+              "address": "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND",
+              "phone": 353894889596,
+              "__v": 0
+            },
+            {
+              "note": "Not spicy!",
+              "status": 0,
+              "_id": "5dbc53e517e1a64a94fcf556",
+              "foods": [
+                {
+                  "_id": "5dbc53e517e1a64a94fcf557",
+                  "name": "Rice Cake Stir-Fried with Crabs",
+                  "price": 14,
+                  "quantity": 1
+                }
+              ],
+              "user": "user1",
+              "seller": "seller1",
+              "address": "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND",
+              "phone": 353894889596,
+              "__v": 0
+            },
+            {
+              "note": "Not spicy!",
+              "status": 0,
+              "_id": "5dbc53e517e1a64a94fcf558",
+              "foods": [
+                {
+                  "_id": "5dbc53e517e1a64a94fcf559",
+                  "name": "Rice Cake Stir-Fried with Crabs",
+                  "price": 14,
+                  "quantity": 1
+                }
+              ],
+              "user": "user1",
+              "seller": "seller1",
+              "address": "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND",
+              "phone": 353894889596,
+              "__v": 0
+            },
+            {
+              "note": "Not spicy!",
+              "status": 0,
+              "_id": "5dbc53e517e1a64a94fcf55a",
+              "foods": [
+                {
+                  "_id": "5dbc53e517e1a64a94fcf55b",
+                  "name": "Egg",
+                  "price": 2,
+                  "quantity": 5
+                }
+              ],
+              "user": "user1",
+              "seller": "seller1",
+              "address": "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND",
+              "phone": 353894889596,
+              "__v": 0
+            },
+            {
+              "note": "Not spicy!",
+              "status": 0,
+              "_id": "5dbc53e517e1a64a94fcf55c",
+              "foods": [
+                {
+                  "_id": "5dbc53e517e1a64a94fcf55d",
+                  "name": "Beef Pie",
+                  "price": 15,
+                  "quantity": 2
+                }
+              ],
+              "user": "user1",
+              "seller": "seller1",
+              "address": "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND",
+              "phone": 353894889596,
+              "__v": 0
+            },
+            {
+              "note": "Not spicy!",
+              "status": 0,
+              "_id": "5dbc53e517e1a64a94fcf55e",
+              "foods": [
+                {
+                  "_id": "5dbc53e517e1a64a94fcf55f",
+                  "name": "Beef Pie",
+                  "price": 15,
+                  "quantity": 2
+                }
+              ],
+              "user": "user1",
+              "seller": "seller1",
+              "address": "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND",
+              "phone": 353894889596,
+              "__v": 0
+            },
+            {
+              "note": "Not spicy!",
+              "status": 0,
+              "_id": "5dbc53e417e1a64a94fcf546",
+              "foods": [
+                {
+                  "_id": "5dbc53e417e1a64a94fcf547",
+                  "name": "Egg & Pork Congee",
+                  "price": 10,
+                  "quantity": 2
+                }
+              ],
+              "user": "user1",
+              "seller": "seller1",
+              "address": "APARTMENT 19, BLOCK 2, RIVERWALK, INNER RING ROAD, WATERFORD, IRELAND",
+              "phone": 353894889596,
+              "__v": 0
+            }
+          ]
+        }
+        nock('https://takeawayapp-sam.herokuapp.com')
+            .get('/order', {
+              token: token
+            })
+            .reply(200, response)
       } catch (err) {
         console.log(err)
       }
