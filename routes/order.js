@@ -228,8 +228,7 @@ router.updateOrder = (req, res) => {
             order.phone = req.body.phone
             order.address = req.body.address
             order.note = req.body.note
-            // 0 - to be commented, 1 - commented
-            order.status = 0
+            order.status = req.body.status
             order.foods = req.body.foods
             let totalPrice = 0
             order.foods.forEach((food) => {
