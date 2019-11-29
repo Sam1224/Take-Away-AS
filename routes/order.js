@@ -199,6 +199,58 @@ router.addOrder = (req, res) => {
 }
 
 /**
+ * PUT
+ * updateOrder - update an order
+ * @param req
+ * @param res
+ */
+router.updateOrder = (req, res) => {
+  res.setHeader('Content-Type', 'application/json')
+
+  // jwt
+  let token = req.body.token
+  if (!token) {
+    res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
+  } else {
+    jwt.verify(token, superSecret, (err, decoded) => {
+      if (err) {
+        res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+      } else {
+        req.decoded = decoded
+
+        // eslint-disable-next-line no-unused-vars
+        Order.findById(req.params.id, (err, order) => {
+          if (err) {
+            res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+          } else {
+            order.user = req.body.user
+            order.seller = req.body.seller
+            order.phone = req.body.phone
+            order.address = req.body.address
+            order.note = req.body.note
+            // 0 - to be commented, 1 - commented
+            order.status = 0
+            order.foods = req.body.foods
+            let totalPrice = 0
+            order.foods.forEach((food) => {
+              totalPrice += food.price * food.quantity
+            })
+            order.totalPrice = totalPrice
+            Order.save((err) => {
+              if (err) {
+                res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
+              } else {
+                res.send(JSON.stringify({code: ERR_OK, message: 'Successfully Update Order'}, null, 5))
+              }
+            })
+          }
+        })
+      }
+    })
+  }
+}
+
+/**
  * DELETE
  * deleteOrder - delete an order
  * @param req

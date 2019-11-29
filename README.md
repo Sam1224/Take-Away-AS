@@ -63,7 +63,7 @@ This project is a backend of a take-away app, it could do some basic `CRUD` oper
 
 It uses `jsonwebtoken` as a way of authentication, each api that needs authentication should put a token in the request body to be verified.
 
-It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corresponded models), there are `31` RESTful apis in total, with `11 GET`, `9 POST`, `4 PUT` and `7 DELETE`. They are listed as follow:
+It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corresponded models), there are `31` RESTful apis in total, with `11 GET`, `9 POST`, `5 PUT` and `7 DELETE`. They are listed as follow:
 - `user` (./routes/user.js)
     - GET       -   findAll
         - Return a list of all users.
@@ -240,22 +240,22 @@ It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corres
         - Return a list of all orders.
         - Need jwt authenticattion.
         - `localhost:3000/order`
-            - `token`:  'xxx'
+            - `token`:  'xxx' (put in the request header)
     - GET       -   findOne
         - Return one order identified by `id`.
         - Need jwt authentication.
         - `localhost:3000/order/:id`
-            - `token`:  'xxx'
+            - `token`:  'xxx' (put in the request header)
     - GET       -   findAllByUser
         - Return a list of all orders belong to one user identified by `id`.
         - Need jwt authentication.
         - `localhost:3000/order/user/:id`
-            - `token`:  'xxx'
+            - `token`:  'xxx' (put in the request header)
     - GET       -   findAllBySeller
         - Return a list of all orders belong to one seller identified by `id`.
         - Need jwt authentication.
         - `localhost:3000/order/seller/:id`
-            - `token`:  'xxx'
+            - `token`:  'xxx' (put in the request header)
     - POST      -   addOrder
         - Create a new order.
         - Need jwt authentication.
@@ -271,6 +271,21 @@ It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corres
                           'quantity': 2
                       }, ...]
             - `token`: 'xxx'
+    - PUT       -   updateOrder
+            - Update one order identified by `id`.
+            - Need jwt authentication.
+            - `localhost:3000/order/:id`
+                - `user`: 'xxx'
+               - `seller`: 'xxx'
+               - `address`: ''
+               - `phone`: xxx
+               - `note`: 'xxx'
+               - `foods`: [{
+                             'name': 'xxx',
+                             'price': 10,
+                             'quantity': 2
+                         }, ...]
+               - `token`: 'xxx'
     - DELETE    -   deleteOrder
         - Delete one order identified by `id`.
         - Need jwt authentication.
@@ -289,7 +304,7 @@ It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corres
     - PUT       -   commentOrder
         - Comment for one order identified by `id`.
         - Need jwt authentication.
-        - `localhost:3000/order/:id`
+        - `localhost:3000/order/:id/comment`
             - `seller`: 'xxx',
             - `username`: 'xxx'
             - `deliveryTime`: 30
@@ -303,7 +318,7 @@ It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corres
         - Get a user's top n foods from one/all seller(s).
         - Need jwt authentication.
         - `localhost:3000/topfood/:user/:seller/:num`
-            - `token`: 'xxx'
+            - `token`: 'xxx' (put in the request header)
 
 ## Persistence Approach
 - App:
