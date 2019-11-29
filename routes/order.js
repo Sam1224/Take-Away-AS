@@ -236,7 +236,7 @@ router.updateOrder = (req, res) => {
               totalPrice += food.price * food.quantity
             })
             order.totalPrice = totalPrice
-            Order.save((err) => {
+            order.save((err) => {
               if (err) {
                 res.send(JSON.stringify({code: ERR_NOK, error: err}, null, 5))
               } else {
