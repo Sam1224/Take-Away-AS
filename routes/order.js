@@ -310,7 +310,8 @@ router.commentOrder = (req, res) => {
             let rating = {}
             let seller = req.body.seller
             rating.username = req.body.username
-            rating.rateTime = new Date().getTime()
+            // 13bits => 10bits
+            rating.rateTime = new Date().getTime() / 1000
             rating.deliveryTime = req.body.deliveryTime
             rating.score = req.body.score
             rating.rateType = req.body.rateType
