@@ -33,7 +33,7 @@ router.findAll = (req, res) => {
   res.setHeader('Content-Type', 'application/json')
 
   // jwt
-  let token = req.body.token
+  let token = req.headers.token
   if (!token) {
     res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
   } else {
@@ -65,7 +65,7 @@ router.findAllByUser = (req, res) => {
   res.setHeader('Content-Type', 'application/json')
 
   // jwt
-  let token = req.body.token
+  let token = req.headers.token
   if (!token) {
     res.send(JSON.stringify({code: USER_NAT, message: 'Not Login Yet, Please Login'}, null, 5))
   } else {
