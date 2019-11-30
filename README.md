@@ -63,7 +63,7 @@ This project is a backend of a take-away app, it could do some basic `CRUD` oper
 
 It uses `jsonwebtoken` as a way of authentication, each api that needs authentication should put a token in the request body to be verified.
 
-It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corresponded models), there are `31` RESTful apis in total, with `11 GET`, `9 POST`, `5 PUT` and `7 DELETE`. They are listed as follow:
+It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corresponded models), there are `33` RESTful apis in total, with `12 GET`, `9 POST`, `5 PUT` and `7 DELETE`. They are listed as follow:
 - `user` (./routes/user.js)
     - GET       -   findAll
         - Return a list of all users.
@@ -94,6 +94,10 @@ It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corres
         - `localhost:3000/login`
             - `username`:   'xxx'
             - `password`:   'xxx'
+    - GET       -   getToken
+            - Get the jwt token for 3rd party OAuth2.
+            - The api invoked to get the jwt token, no need itself.
+            - `localhost:3000/getToken/:username`
     - DELETE    -   deleteUser
         - Delete one user by `id`.
         - No need for jwt authentication.
