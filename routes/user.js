@@ -460,7 +460,7 @@ router.login = (req, res) => {
 router.getToken = (req, res) => {
   res.setHeader('Content-Type', 'application/json')
 
-  let token = jwt.sign({username: req.param.username}, superSecret, {
+  let token = jwt.sign({username: req.params.username}, superSecret, {
     // 1 hour
     expiresIn: 3600
   })

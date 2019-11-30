@@ -58,7 +58,7 @@ app.post('/user/address', userRouter.addAddress)
 app.post('/user/pay', userRouter.addPay)
 app.post('/user/favorite', userRouter.addFavorite)
 app.post('/login', userRouter.login)
-app.get('/token', userRouter.getToken)
+app.get('/token/:username', userRouter.getToken)
 
 // Order
 app.get('/order', orderRouter.findAll)
