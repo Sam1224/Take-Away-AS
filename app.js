@@ -11,6 +11,9 @@ var sellerRouter = require('./routes/seller')
 var userRouter = require('./routes/user')
 var orderRouter = require('./routes/order')
 
+// reverse proxy
+var proxy = require('http-proxy-middleware')
+
 var app = express()
 
 var cors = require('cors')
@@ -28,6 +31,45 @@ app.use(stylus.middleware(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
+
+/**
+ * Reverse proxy
+ */
+app.use('/github', proxy({
+  target: 'https://github.com/',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/github': 'https://github.com/'
+  }
+}))
+app.use('/gitlab', proxy({
+  target: 'https://gitlab.com/',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/gitlab': 'https://gitlab.com/'
+  }
+}))
+app.use('/gitee', proxy({
+  target: 'https://gitee.com/',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/gitee': 'https://gitee.com/'
+  }
+}))
+app.use('/bitbucket', proxy({
+  target: 'https://bitbucket.org/',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/bitbucket': 'https://bitbucket.org/'
+  }
+}))
+app.use('/weibo', proxy({
+  target: 'https://weibo.org/',
+  changeOrigin: true,
+  pathRewrite: {
+    '^/weibo': 'https://api.weibo.com/'
+  }
+}))
 
 /**
  * Self-defined routers
