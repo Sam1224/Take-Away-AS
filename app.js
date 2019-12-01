@@ -35,11 +35,12 @@ app.use('/', indexRouter)
 /**
  * Reverse proxy
  */
-app.use('/github', proxy({
-  target: 'https://github.com/',
+app.use('/github/login/oauth/access_token', proxy({
+  target: 'https://github.com/login/oauth/access_token/',
   changeOrigin: true,
+  ws: true,
   pathRewrite: {
-    '^/github': 'https://github.com/'
+    '^/github/login/oauth/access_token': 'https://github.com/login/oauth/access_token/'
   }
 }))
 app.use('/gitlab', proxy({
