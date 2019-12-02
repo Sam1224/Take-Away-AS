@@ -10,9 +10,11 @@ var indexRouter = require('./routes/index')
 var sellerRouter = require('./routes/seller')
 var userRouter = require('./routes/user')
 var orderRouter = require('./routes/order')
+var oauthRouter = require('./routes/oauth')
 
 // reverse proxy
 var proxy = require('http-proxy-middleware')
+var axios = require('axios')
 
 var app = express()
 
@@ -33,48 +35,15 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', indexRouter)
 
 /**
- * Reverse proxy
- */
-app.use('/github/login/oauth/access_token', proxy({
-  target: 'https://github.com/login/oauth/access_token/',
-  changeOrigin: true,
-  ws: true,
-  pathRewrite: {
-    '^/github/login/oauth/access_token': 'https://github.com/login/oauth/access_token/'
-  }
-}))
-app.use('/gitlab', proxy({
-  target: 'https://gitlab.com/',
-  changeOrigin: true,
-  pathRewrite: {
-    '^/gitlab': 'https://gitlab.com/'
-  }
-}))
-app.use('/gitee', proxy({
-  target: 'https://gitee.com/',
-  changeOrigin: true,
-  pathRewrite: {
-    '^/gitee': 'https://gitee.com/'
-  }
-}))
-app.use('/bitbucket', proxy({
-  target: 'https://bitbucket.org/',
-  changeOrigin: true,
-  pathRewrite: {
-    '^/bitbucket': 'https://bitbucket.org/'
-  }
-}))
-app.use('/weibo', proxy({
-  target: 'https://weibo.org/',
-  changeOrigin: true,
-  pathRewrite: {
-    '^/weibo': 'https://api.weibo.com/'
-  }
-}))
-
-/**
  * Self-defined routers
  */
+// Oauth
+app.get('/loginGithub', oauthRouter.getGithubToken)
+app.get('/loginGitlab', oauthRouter.getGitlabToken)
+app.get('/loginGitee', oauthRouter.getGiteeToken)
+app.get('/loginBitbucket', oauthRouter.getBitbucketToken)
+app.get('/loginWeibo', oauthRouter.getWeiboToken)
+
 // Seller
 app.get('/seller', sellerRouter.findAll)
 app.get('/seller/:id', sellerRouter.findOne)
