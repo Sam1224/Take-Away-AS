@@ -47,6 +47,8 @@ const seller = new Schema({
       sellCount: {type: Number, default: 0},
       rating: {type: Number, default: 0},
       info: {type: String, default: ''},
+      icon: {type: String, default: ''},
+      image: {type: String, default: ''},
       ratings: [{
         username: String,
         rateTime: Number,
