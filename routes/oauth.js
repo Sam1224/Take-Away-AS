@@ -28,17 +28,13 @@ router.getGithubToken = (req, res) => {
     let code = req.query.code
     axios.post(`https://github.com/login/oauth/access_token?client_id=${client_id}&client_secret=${client_secret}&code=${code}`, {}, {
         headers: {
+            'accept': 'application/json',
             'Content-Type': 'application/json'
         }
     }).then(response => {
         res.setHeader('Access-Control-Allow-Origin', '*')
-        let resdata = response.data.split('&')
-        let query = {}
-        resdata.forEach((data) => {
-            let temp = data.split('=')
-            query.temp[0] = temp[1]
-        })
-        let accessToken = query.access_token
+        let resdata = response.data
+        let accessToken = resdata.access_token
         if (accessToken) {
             axios.get(`https://api.github.com/user?access_token=${accessToken}`, {
                 headers: {
