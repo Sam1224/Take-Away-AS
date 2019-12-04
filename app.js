@@ -22,7 +22,6 @@ var app = express()
 
 // upload files
 const upload = multer({dest: 'uploads/'})
-app.use(upload.single('file'))
 
 var cors = require('cors')
 app.use(cors())
@@ -44,7 +43,8 @@ app.use('/', indexRouter)
  * Self-defined routers
  */
 // File
-app.post('/upload', fileRouter.upload)
+app.post('/upload', upload.single('file'), fileRouter.upload)
+app.post('/uploadmul', upload.array('files', 10), fileRouter.uploadmul)
 app.get('/uploads/:filename', fileRouter.getImage)
 
 // Oauth
