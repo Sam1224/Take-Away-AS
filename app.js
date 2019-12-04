@@ -5,18 +5,24 @@ var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 var stylus = require('stylus')
 var mongoose = require('mongoose')
+var multer = require('multer')
 
 var indexRouter = require('./routes/index')
 var sellerRouter = require('./routes/seller')
 var userRouter = require('./routes/user')
 var orderRouter = require('./routes/order')
 var oauthRouter = require('./routes/oauth')
+var fileRouter = require('./routes/file')
 
 // reverse proxy
 var proxy = require('http-proxy-middleware')
 var axios = require('axios')
 
 var app = express()
+
+// upload files
+const upload = multer({dest: 'uploads/'})
+app.use(upload.single('file'))
 
 var cors = require('cors')
 app.use(cors())
@@ -37,6 +43,10 @@ app.use('/', indexRouter)
 /**
  * Self-defined routers
  */
+// File
+app.post('/upload', fileRouter.upload)
+app.get('/uploads/:filename', fileRouter.getImage)
+
 // Oauth
 app.get('/loginGithub', oauthRouter.getGithubToken)
 app.get('/loginGitlab', oauthRouter.getGitlabToken)
