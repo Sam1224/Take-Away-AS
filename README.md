@@ -63,7 +63,7 @@ This project is a backend of a take-away app, it could do some basic `CRUD` oper
 
 It uses `jsonwebtoken` as a way of authentication, each api that needs authentication should put a token in the request body to be verified.
 
-It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corresponded models), there are `33` RESTful apis in total, with `12 GET`, `9 POST`, `5 PUT` and `7 DELETE`. They are listed as follow:
+It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corresponded models), there are `35` RESTful apis in total, with `13 GET`, `10 POST`, `5 PUT` and `7 DELETE`. They are listed as follow:
 - `user` (./routes/user.js)
     - GET       -   findAll
         - Return a list of all users.
@@ -323,6 +323,17 @@ It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corres
         - Need jwt authentication.
         - `localhost:3000/topfood/:user/:seller/:num`
             - `token`: 'xxx' (put in the request header)
+            
+- `file` (./routes/file.js)
+    - GET       -   getImage
+        - Get image.
+        - No need for jwt authenticattion.
+        - `localhost:3000/uploads/:filename`
+    - POST      -   upload
+        - Upload image.
+        - No need for jwt authentication.
+        - `localhost:3000/upload`
+            - file
 
 ## Persistence Approach
 - App:
