@@ -44,7 +44,7 @@ router.uploadmul = (req, res) => {
     let files = req.files
     let filepaths = []
     files.forEach((file) => {
-        let filepath = 'uploads/default.jpg'
+        let filepath
         if (file.originalname.endsWith('.jpg')) {
             filepath = `uploads/${file.filename}.jpg`
         } else if (file.originalname.endsWith('.png')) {
@@ -69,7 +69,7 @@ router.uploadmul = (req, res) => {
 router.getImage = (req, res) => {
     let filepath = `uploads/${req.params.filename}`
     fs.exists(filepath, (exists) => {
-        res.sendfile(exists ? filepath : 'uploads/default.jpg')
+        res.sendfile(exists ? filepath : 'assets/default.jpg')
     })
 }
 
