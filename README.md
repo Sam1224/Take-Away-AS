@@ -64,7 +64,7 @@ This project is a backend of a take-away app, it could do some basic `CRUD` oper
 It uses `jsonwebtoken` as a way of authentication, each api that needs authentication should put a token in the request body to be verified.
 
 It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corresponded models), there are `35` RESTful apis in total, with `13 GET`, `10 POST`, `5 PUT` and `7 DELETE`. They are listed as follow:
-- `user` (./routes/user.js)
+- [`user`](./routes/user.js)
     - GET       -   findAll
         - Return a list of all users.
         - No need for jwt authentication.
@@ -144,7 +144,7 @@ It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corres
             - `username`:   'xxx'
             - `favorite`:   'xxx'
             - `token`:      'xxx'
-- `seller` (./routes/seller.js)
+- [`seller`](./routes/seller.js)
     - GET       -   findAll
         - Return a list of all sellers.
         - No need for jwt authentication.
@@ -239,7 +239,7 @@ It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corres
         - Get the top n sellers whose rank rates are the highest.
         - No need for jwt authentication.
         - `localhost:3000/seller/rankrate/:num/:seq`
-- `order` (./routes/order.js)
+- [`order`](./routes/order.js)
     - GET       -   findAll
         - Return a list of all orders.
         - Need jwt authenticattion.
@@ -324,7 +324,7 @@ It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corres
         - `localhost:3000/topfood/:user/:seller/:num`
             - `token`: 'xxx' (put in the request header)
             
-- `file` (./routes/file.js)
+- [`file`](./routes/file.js)
     - GET       -   getImage
         - Get image.
         - No need for jwt authenticattion.
@@ -334,6 +334,32 @@ It could be roughly divided into 3 parts: `user`, `seller` and `order` (3 corres
         - No need for jwt authentication.
         - `localhost:3000/upload`
             - file
+    - POST      -   uploadmul
+        - Upload multiple images with a maximum of 10.
+        - No need for jwt authentication.
+        - `localhost:3000/uploadmul`
+            - files(max:10)
+- [`oauth`](./routes/oauth.js)
+    - POST      -   getGithubToken
+        - Github OAuth2 service.
+        - No need for jwt authentication.
+        - `localhost:3000/loginGithub?client_id=xxx&client_secret=xxx&code=xxx`
+    - POST      -   getGitlabToken
+        - Gitlab OAuth2 service.
+        - No need for jwt authentication.
+        - `localhost:3000/loginGitlab?client_id=xxx&client_secret=xxx&code=xxx&redirect_uri=xxx`
+    - POST      -   getGiteeToken
+        - Gitlee OAuth2 service.
+        - No need for jwt authentication.
+        - `localhost:3000/loginGitee?client_id=xxx&client_secret=xxx&code=xxx&redirect_uri=xxx&grant_type=xxx`
+    - POST      -   getBitbucketToken
+        - Bitbucket OAuth2 service.
+        - No need for jwt authentication.
+        - `localhost:3000/loginBitbucket?access_token=xxx`
+    - POST      -   getWeiboToken
+        - Weibo OAuth2 service.
+        - No need for jwt authentication.
+        - `localhost:3000/loginWeibo?client_id=xxx&client_secret=xxx&code=xxx&grant_type=xxx&redirect_uri=xxx`
 
 ## Persistence Approach
 - App:
